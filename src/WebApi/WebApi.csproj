@@ -7,7 +7,27 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="MediatR" Version="12.4.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.2.0" />
+        <PackageReference Include="YamlDotNet" Version="16.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Core.CrossCuttingConcerns.Exception.WebApi">
+        <HintPath>..\..\..\Stratum.Core\src\Core.CrossCuttingConcerns.Exception.WebApi\bin\Debug\net9.0\Core.CrossCuttingConcerns.Exception.WebApi.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Localization.WebApi">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Localization.WebApi\bin\Debug\net9.0\Core.Localization.WebApi.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Persistence.WebApi">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Persistence.WebApi\bin\Debug\net9.0\Core.Persistence.WebApi.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Persistence\Persistence.csproj" />
     </ItemGroup>
 
 </Project>

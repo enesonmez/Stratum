@@ -6,4 +6,55 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Reference Include="Core.Application">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Application\bin\Debug\net9.0\Core.Application.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.CrossCuttingConcerns.Exception">
+        <HintPath>..\..\..\Stratum.Core\src\Core.CrossCuttingConcerns.Exception\bin\Debug\net9.0\Core.CrossCuttingConcerns.Exception.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.CrossCuttingConcerns.Logging">
+        <HintPath>..\..\..\Stratum.Core\src\Core.CrossCuttingConcerns.Logging\bin\Debug\net9.0\Core.CrossCuttingConcerns.Logging.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Localization">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Localization\bin\Debug\net9.0\Core.Localization.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Localization.DI">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Localization.DI\bin\Debug\net9.0\Core.Localization.DI.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Localization.File">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Localization.File\bin\Debug\net9.0\Core.Localization.File.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Persistence">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Persistence\bin\Debug\net9.0\Core.Persistence.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Security">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Security\bin\Debug\net9.0\Core.Security.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Domain\Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
+      <PackageReference Include="FluentValidation" Version="11.11.0" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+      <PackageReference Include="MediatR" Version="12.4.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\" />
+      <Folder Include="Repositories\" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="Features\**\Resources\Locales\*.*.yaml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
