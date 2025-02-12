@@ -49,7 +49,6 @@
 
     <ItemGroup>
       <Folder Include="Services\" />
-      <Folder Include="Repositories\" />
     </ItemGroup>
     <ItemGroup>
       <None Update="Features\**\Resources\Locales\*.*.yaml">

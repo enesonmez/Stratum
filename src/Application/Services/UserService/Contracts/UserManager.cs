@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using Application.Repositories;
+using Application.Repositories.Users;
 using Application.Services.UserService.Rules;
 using Core.Persistence.Paging;
 using Core.Security.Hashing;
@@ -10,12 +10,16 @@ namespace Application.Services.UserService.Contracts;
 
 public class UserManager : IUserService
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUserWriteRepository _userWriteRepository;
+    private readonly IUserReadRepository _userReadRepository;
     private readonly UserBusinessRules _userBusinessRules;
     
-    public UserManager(IUserRepository userRepository, UserBusinessRules userBusinessRules)
+    public UserManager(IUserWriteRepository userWriteRepository, 
+        IUserReadRepository userReadRepository, 
+        UserBusinessRules userBusinessRules)
     {
-        _userRepository = userRepository;
+        _userWriteRepository = userWriteRepository;
+        _userReadRepository = userReadRepository;
         _userBusinessRules = userBusinessRules;
     }
     
@@ -34,7 +38,7 @@ public class UserManager : IUserService
     public async Task<User> AddAsync(User user)
     {
         await _userBusinessRules.UserEmailShouldNotExistsWhenInsert(user.Email);
-        User addedUser = await _userRepository.AddAsync(user);
+        User addedUser = await _userWriteRepository.AddAsync(user);
         
         return addedUser;
     }
@@ -46,7 +50,7 @@ public class UserManager : IUserService
         HashingHelper.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
         user.PasswordHash = passwordHash;
         user.PasswordSalt = passwordSalt;
-        User createdUser = await _userRepository.AddAsync(user);
+        User createdUser = await _userWriteRepository.AddAsync(user);
         
         return createdUser;
     }

@@ -1,10 +1,10 @@
-using Application.Repositories;
+using Application.Repositories.Users;
 using Core.Persistence.DI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
-using Persistence.Repositories;
+using Persistence.Repositories.Users;
 
 namespace Persistence;
 
@@ -15,7 +15,8 @@ public static class PersistenceServiceRegistration
         services.AddDbContext<BaseDbContext>(options => options.UseInMemoryDatabase("BaseDb"));
         services.AddDbMigrationApplier(buildServices => buildServices.GetRequiredService<BaseDbContext>());
 
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserReadRepository, UserReadRepository>();
+        services.AddScoped<IUserWriteRepository, UserWriteRepository>();
         
         
         return services;

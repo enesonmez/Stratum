@@ -1,5 +1,5 @@
 using Application.Features.Users.Constants;
-using Application.Repositories;
+using Application.Repositories.Users;
 using Core.Application.Rules;
 using Core.CrossCuttingConcerns.Exception.Types;
 using Core.Localization.Abstraction;
@@ -8,12 +8,12 @@ namespace Application.Services.UserService.Rules;
 
 public class UserBusinessRules : BaseBusinessRules
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUserReadRepository _userReadRepository;
     private readonly ILocalizationService _localizationService;
 
-    public UserBusinessRules(IUserRepository userRepository, ILocalizationService localizationService)
+    public UserBusinessRules(IUserReadRepository userReadRepository, ILocalizationService localizationService)
     {
-        _userRepository = userRepository;
+        _userReadRepository = userReadRepository;
         _localizationService = localizationService;
     }
     
@@ -25,7 +25,7 @@ public class UserBusinessRules : BaseBusinessRules
     
     public async Task UserEmailShouldNotExistsWhenInsert(string email)
     {
-        bool doesExists = await _userRepository.AnyAsync(predicate: u => u.Email == email);
+        bool doesExists = await _userReadRepository.AnyAsync(predicate: u => u.Email == email);
         if (doesExists)
             await ThrowBusinessException(UsersMessages.UserMailAlreadyExists);
     }
