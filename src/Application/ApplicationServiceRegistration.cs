@@ -36,8 +36,10 @@ public static class ApplicationServiceRegistration
         services.AddSingleton<ILogger, SerilogFileLogger>(_ => new SerilogFileLogger(fileLogConfiguration));
         
         services.AddScoped<IUserService, UserManager>();
-
+        
+        // Localization
         services.AddFileLocalization(Assembly.GetExecutingAssembly());
+        // services.AddDbLocalization();
         
         return services;
     }

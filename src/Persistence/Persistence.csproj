@@ -14,6 +14,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Reference Include="Core.Localization">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Localization\bin\Debug\net9.0\Core.Localization.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Localization.DB">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Localization.DB\bin\Debug\net9.0\Core.Localization.DB.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Localization.DI">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Localization.DI\bin\Debug\net9.0\Core.Localization.DI.dll</HintPath>
+      </Reference>
       <Reference Include="Core.Persistence">
         <HintPath>..\..\..\Stratum.Core\src\Core.Security\bin\Debug\net9.0\Core.Persistence.dll</HintPath>
       </Reference>
