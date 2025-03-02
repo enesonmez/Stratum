@@ -23,16 +23,27 @@ public class UserManager : IUserService
         _userBusinessRules = userBusinessRules;
     }
     
-    public Task<User?> GetAsync(Expression<Func<User, bool>> predicate, Func<IQueryable<User>, IIncludableQueryable<User, object>>? include = null, bool withDeleted = false, bool enableTracking = true,
+    public async Task<User?> GetAsync(Expression<Func<User, bool>> predicate, Func<IQueryable<User>, IIncludableQueryable<User, object>>? include = null, bool withDeleted = false, bool enableTracking = true,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        User? user = await _userReadRepository.GetAsync(predicate, include, withDeleted, enableTracking, cancellationToken);
+        return user;
     }
 
-    public Task<IPaginate<User>?> GetListAsync(Expression<Func<User, bool>>? predicate = null, Func<IQueryable<User>, IOrderedQueryable<User>>? orderBy = null, Func<IQueryable<User>, IIncludableQueryable<User, object>>? include = null, int index = 0,
+    public async Task<IPaginate<User>?> GetListAsync(Expression<Func<User, bool>>? predicate = null, Func<IQueryable<User>, IOrderedQueryable<User>>? orderBy = null, Func<IQueryable<User>, IIncludableQueryable<User, object>>? include = null, int index = 0,
         int size = 10, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        IPaginate<User> userList = await _userReadRepository.GetListAsync(
+            predicate,
+            orderBy,
+            include,
+            index,
+            size,
+            withDeleted,
+            enableTracking,
+            cancellationToken
+        );
+        return userList;
     }
 
     public async Task<User> AddAsync(User user)
@@ -54,15 +65,32 @@ public class UserManager : IUserService
         
         return createdUser;
     }
-
-    public Task<User> UpdateAsync(User user)
+    
+    public async Task<User> UpdateAsync(User user)
     {
-        throw new NotImplementedException();
+        await _userBusinessRules.UserEmailShouldNotExistsWhenUpdate(user.Id, user.Email);
+        
+        User updatedUser = await _userWriteRepository.UpdateAsync(user);
+        
+        return updatedUser;
+    }
+
+    public async Task<User> UpdateWithPasswordAsync(User? user, string password)
+    {
+        await _userBusinessRules.UserShouldBeExistsWhenSelected(user);
+        await _userBusinessRules.UserEmailShouldNotExistsWhenUpdate(user!.Id, user.Email);
+        
+        HashingHelper.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+        user.PasswordHash = passwordHash;
+        user.PasswordSalt = passwordSalt;
+        User updatedUser = await _userWriteRepository.UpdateAsync(user);
+        
+        return updatedUser;
     }
 
     public async Task<User> DeleteAsync(User user, bool permanent = false)
     {
-        User deletedUser = await _userWriteRepository.DeleteAsync(user);
+        User deletedUser = await _userWriteRepository.DeleteAsync(user, permanent);
 
         return deletedUser;
     }
@@ -75,6 +103,6 @@ public class UserManager : IUserService
         
         await _userBusinessRules.UserShouldBeExistsWhenSelected(user);
 
-        return await DeleteAsync(user!);
+        return await DeleteAsync(user!, permanent);
     }
 }

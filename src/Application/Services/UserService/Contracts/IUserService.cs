@@ -29,6 +29,7 @@ public interface IUserService
     Task<User> AddAsync(User user);
     Task<User> CreateAsync(User user, string password);
     Task<User> UpdateAsync(User user);
+    Task<User> UpdateWithPasswordAsync(User? user, string password);
     Task<User> DeleteAsync(User user, bool permanent = false);
     Task<User> DeleteByIdAsync(Guid id, bool permanent = false);
 }

@@ -1,5 +1,6 @@
 using Application.Features.Users.Commands.Create;
 using Application.Features.Users.Commands.Delete;
+using Application.Features.Users.Commands.Update;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,10 +32,12 @@ namespace WebApi.Controllers
             return Created(uri:"", value:result);
         }
 
-        // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // PUT api/<UsersController>
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] UpdateUserCommandRequest updateUserCommandRequest)
         {
+            UpdatedUserCommandResponse result = await Mediator.Send(updateUserCommandRequest);
+            return Ok(result);
         }
 
         // DELETE api/<UsersController>
