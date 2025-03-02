@@ -14,6 +14,13 @@ public interface IUserService
         bool enableTracking = true,
         CancellationToken cancellationToken = default
     );
+    
+    Task<User> GetByIdAsync(
+        Guid id,
+        bool withDeleted = false,
+        bool enableTracking = true,
+        CancellationToken cancellationToken = default
+    ); 
 
     Task<IPaginate<User>> GetListAsync(
         Expression<Func<User, bool>>? predicate = null,
@@ -29,7 +36,7 @@ public interface IUserService
     Task<User> AddAsync(User user);
     Task<User> CreateAsync(User user, string password);
     Task<User> UpdateAsync(User user);
-    Task<User> UpdateWithPasswordAsync(User? rawUser, User? editUser, string password);
+    Task<User> UpdateWithPasswordAsync(User user, string password);
     Task<User> DeleteAsync(User user, bool permanent = false);
     Task<User> DeleteByIdAsync(Guid id, bool permanent = false);
 }

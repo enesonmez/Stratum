@@ -1,6 +1,7 @@
 using Application.Features.Users.Commands.Create;
 using Application.Features.Users.Commands.Delete;
 using Application.Features.Users.Commands.Update;
+using Application.Features.Users.Queries.GetById;
 using Application.Features.Users.Queries.GetList;
 using Core.Application.Requests;
 using Core.Application.Responses;
@@ -23,10 +24,11 @@ namespace WebApi.Controllers
         }
 
         // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetById([FromRoute] GetByIdUserQueryRequest getByIdUserQuery)
         {
-            return "value";
+            GetByIdUserQueryResponse result = await Mediator.Send(getByIdUserQuery);
+            return Ok(result);
         }
 
         // POST api/<UsersController>

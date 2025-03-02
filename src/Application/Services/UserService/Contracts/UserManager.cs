@@ -30,6 +30,16 @@ public class UserManager : IUserService
         return user;
     }
 
+    public async Task<User> GetByIdAsync(Guid id, bool withDeleted = false, bool enableTracking = true,
+        CancellationToken cancellationToken = default)
+    {
+        User? user = await GetAsync(u=>u.Id.Equals(id), withDeleted: withDeleted, enableTracking: enableTracking, cancellationToken:cancellationToken);
+        
+        await _userBusinessRules.UserShouldBeExistsWhenSelected(user);
+
+        return user!;
+    }
+
     public async Task<IPaginate<User>> GetListAsync(Expression<Func<User, bool>>? predicate = null, Func<IQueryable<User>, IOrderedQueryable<User>>? orderBy = null, Func<IQueryable<User>, IIncludableQueryable<User, object>>? include = null, int index = 0,
         int size = 10, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
@@ -75,15 +85,14 @@ public class UserManager : IUserService
         return updatedUser;
     }
 
-    public async Task<User> UpdateWithPasswordAsync(User? rawUser, User? editUser, string password)
+    public async Task<User> UpdateWithPasswordAsync(User user, string password)
     {
-        await _userBusinessRules.UserShouldBeExistsWhenSelected(rawUser);
-        await _userBusinessRules.UserEmailShouldNotExistsWhenUpdate(rawUser!.Id, rawUser.Email);
+        await _userBusinessRules.UserEmailShouldNotExistsWhenUpdate(user!.Id, user.Email);
         
         HashingHelper.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-        editUser!.PasswordHash = passwordHash;
-        editUser.PasswordSalt = passwordSalt;
-        User updatedUser = await _userWriteRepository.UpdateAsync(editUser);
+        user.PasswordHash = passwordHash;
+        user.PasswordSalt = passwordSalt;
+        User updatedUser = await _userWriteRepository.UpdateAsync(user);
         
         return updatedUser;
     }
