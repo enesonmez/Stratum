@@ -15,7 +15,7 @@ public interface IUserService
         CancellationToken cancellationToken = default
     );
 
-    Task<IPaginate<User>?> GetListAsync(
+    Task<IPaginate<User>> GetListAsync(
         Expression<Func<User, bool>>? predicate = null,
         Func<IQueryable<User>, IOrderedQueryable<User>>? orderBy = null,
         Func<IQueryable<User>, IIncludableQueryable<User, object>>? include = null,
@@ -29,7 +29,7 @@ public interface IUserService
     Task<User> AddAsync(User user);
     Task<User> CreateAsync(User user, string password);
     Task<User> UpdateAsync(User user);
-    Task<User> UpdateWithPasswordAsync(User? user, string password);
+    Task<User> UpdateWithPasswordAsync(User? rawUser, User? editUser, string password);
     Task<User> DeleteAsync(User user, bool permanent = false);
     Task<User> DeleteByIdAsync(Guid id, bool permanent = false);
 }

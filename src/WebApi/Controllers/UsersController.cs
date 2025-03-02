@@ -1,6 +1,9 @@
 using Application.Features.Users.Commands.Create;
 using Application.Features.Users.Commands.Delete;
 using Application.Features.Users.Commands.Update;
+using Application.Features.Users.Queries.GetList;
+using Core.Application.Requests;
+using Core.Application.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +15,11 @@ namespace WebApi.Controllers
     {
         // GET: api/<UsersController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
         {
-            return new string[] { "value1", "value2" };
+            GetListUserQueryRequest getListUserQuery = new() { PageRequest = pageRequest };
+            GetListResponse<GetListUserListItemDto> result = await Mediator.Send(getListUserQuery);
+            return Ok(result);
         }
 
         // GET api/<UsersController>/5

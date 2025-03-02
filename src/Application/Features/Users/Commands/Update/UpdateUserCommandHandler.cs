@@ -18,10 +18,10 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommandRequest
 
     public async Task<UpdatedUserCommandResponse> Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
     {
-        User? user = await _userService.GetAsync(u=>u.Id.Equals(request.Id), cancellationToken: cancellationToken);
-        user = _mapper.Map(request, user);
+        User? rawUser = await _userService.GetAsync(u=>u.Id.Equals(request.Id), cancellationToken: cancellationToken);
+        User? mappedUser = _mapper.Map(request, rawUser);
         
-        User updatedUser = await _userService.UpdateWithPasswordAsync(user, request.Password);
+        User updatedUser = await _userService.UpdateWithPasswordAsync(rawUser, mappedUser, request.Password);
         
         return _mapper.Map<UpdatedUserCommandResponse>(updatedUser);
     }

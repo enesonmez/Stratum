@@ -15,6 +15,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Reference Include="Core.Application">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Application\bin\Debug\net9.0\Core.Application.dll</HintPath>
+      </Reference>
       <Reference Include="Core.CrossCuttingConcerns.Exception.WebApi">
         <HintPath>..\..\..\Stratum.Core\src\Core.CrossCuttingConcerns.Exception.WebApi\bin\Debug\net9.0\Core.CrossCuttingConcerns.Exception.WebApi.dll</HintPath>
       </Reference>
