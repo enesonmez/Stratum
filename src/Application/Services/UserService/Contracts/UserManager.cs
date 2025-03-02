@@ -60,8 +60,21 @@ public class UserManager : IUserService
         throw new NotImplementedException();
     }
 
-    public Task<User> DeleteAsync(User user, bool permanent = false)
+    public async Task<User> DeleteAsync(User user, bool permanent = false)
     {
-        throw new NotImplementedException();
+        User deletedUser = await _userWriteRepository.DeleteAsync(user);
+
+        return deletedUser;
+    }
+    
+    public async Task<User> DeleteByIdAsync(Guid id, bool permanent = false)
+    {
+        User? user = await _userReadRepository.GetAsync(
+            predicate: u => u.Id.Equals(id)
+        );
+        
+        await _userBusinessRules.UserShouldBeExistsWhenSelected(user);
+
+        return await DeleteAsync(user!);
     }
 }

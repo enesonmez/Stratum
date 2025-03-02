@@ -1,4 +1,5 @@
 using Application.Features.Users.Commands.Create;
+using Application.Features.Users.Commands.Delete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,10 +37,12 @@ namespace WebApi.Controllers
         {
         }
 
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // DELETE api/<UsersController>
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] DeleteUserCommandRequest deleteUserCommandRequest)
         {
+            DeletedUserCommandResponse result = await Mediator.Send(deleteUserCommandRequest);
+            return Ok(result);
         }
     }
 }

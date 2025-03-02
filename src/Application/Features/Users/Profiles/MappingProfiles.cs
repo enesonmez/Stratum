@@ -1,4 +1,5 @@
 using Application.Features.Users.Commands.Create;
+using Application.Features.Users.Commands.Delete;
 using AutoMapper;
 using Domain.Entities;
 
@@ -10,5 +11,7 @@ public class MappingProfiles : Profile
     {
         CreateMap<User, CreateUserCommandRequest>().ReverseMap();
         CreateMap<User, CreatedUserCommandResponse>().ReverseMap();
+        CreateMap<User, DeleteUserCommandRequest>().ReverseMap();
+        CreateMap<User, DeletedUserCommandResponse>().ReverseMap();
     }
 }
