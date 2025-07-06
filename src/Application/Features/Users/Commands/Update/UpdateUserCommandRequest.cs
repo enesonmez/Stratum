@@ -8,14 +8,12 @@ public class UpdateUserCommandRequest : IRequest<UpdatedUserCommandResponse>
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
-    public string Password { get; set; }
 
     public UpdateUserCommandRequest()
     {
         FirstName = string.Empty;
         LastName = string.Empty;
         Email = string.Empty;
-        Password = string.Empty;
     }
 
     public UpdateUserCommandRequest(Guid id, string firstName, string lastName, string email, string password)
@@ -24,6 +22,5 @@ public class UpdateUserCommandRequest : IRequest<UpdatedUserCommandResponse>
         FirstName = firstName;
         LastName = lastName;
         Email = email;
-        Password = password;
     }
 }

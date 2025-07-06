@@ -30,11 +30,14 @@ public static class ApplicationServiceRegistration
             mediatRServiceConfiguration.AddOpenBehavior(typeof(RequestValidationBehavior<,>));
         });
         
+        // Business Rules
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
-
+        
+        // Logging
         var fileLogConfiguration = GetConfiguration(configuration);
         services.AddSingleton<ILogger, SerilogFileLogger>(_ => new SerilogFileLogger(fileLogConfiguration));
         
+        // Services
         services.AddScoped<IUserService, UserManager>();
         
         // Localization

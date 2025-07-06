@@ -29,7 +29,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommandRequest
         
         user = _mapper.Map(request, user);
         
-        User updatedUser = await _userService.UpdateWithPasswordAsync(user, request.Password);
+        User updatedUser = await _userService.UpdateAsync(user);
         
         return _mapper.Map<UpdatedUserCommandResponse>(updatedUser);
     }

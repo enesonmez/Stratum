@@ -1,8 +1,9 @@
+using Core.Application.Pipelines.Logging;
 using MediatR;
 
 namespace Application.Features.Users.Commands.Create;
 
-public class CreateUserCommandRequest : IRequest<CreatedUserCommandResponse>
+public class CreateUserCommandRequest : IRequest<CreatedUserCommandResponse>, ILoggableRequest
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

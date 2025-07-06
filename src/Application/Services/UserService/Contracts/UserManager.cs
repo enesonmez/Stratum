@@ -87,14 +87,11 @@ public class UserManager : IUserService
 
     public async Task<User> UpdateWithPasswordAsync(User user, string password)
     {
-        await _userBusinessRules.UserEmailShouldNotExistsWhenUpdate(user!.Id, user.Email);
-        
         HashingHelper.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
         user.PasswordHash = passwordHash;
         user.PasswordSalt = passwordSalt;
-        User updatedUser = await _userWriteRepository.UpdateAsync(user);
-        
-        return updatedUser;
+
+        return await UpdateAsync(user);
     }
 
     public async Task<User> DeleteAsync(User user, bool permanent = false)
