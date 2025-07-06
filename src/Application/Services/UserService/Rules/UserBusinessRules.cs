@@ -10,37 +10,31 @@ namespace Application.Services.UserService.Rules;
 public class UserBusinessRules : BaseBusinessRules
 {
     private readonly IUserReadRepository _userReadRepository;
-    private readonly ILocalizationService _localizationService;
 
-    public UserBusinessRules(IUserReadRepository userReadRepository, ILocalizationService localizationService)
+
+    public UserBusinessRules(IUserReadRepository userReadRepository, ILocalizationService localizationService) : 
+        base(localizationService)
     {
         _userReadRepository = userReadRepository;
-        _localizationService = localizationService;
     }
-    
-    private async Task ThrowBusinessException(string messageKey)
-    {
-        string message = await _localizationService.GetLocalizedAsync(messageKey, UsersMessages.SectionName);
-        throw new BusinessException(message);
-    }
-    
+
     public async Task UserEmailShouldNotExistsWhenInsert(string email)
     {
         bool doesExists = await _userReadRepository.AnyAsync(predicate: u => u.Email == email);
         if (doesExists)
-            await ThrowBusinessException(UsersMessages.UserMailAlreadyExists);
+            await ThrowBusinessException(UsersMessages.UserMailAlreadyExists, UsersMessages.SectionName);
     }
-    
+
     public async Task UserShouldBeExistsWhenSelected(User? user)
     {
         if (user == null)
-            await ThrowBusinessException(UsersMessages.UserDontExists);
+            await ThrowBusinessException(UsersMessages.UserDontExists, UsersMessages.SectionName);
     }
-    
+
     public async Task UserEmailShouldNotExistsWhenUpdate(Guid id, string email)
     {
         bool doesExists = await _userReadRepository.AnyAsync(predicate: u => u.Id != id && u.Email == email);
         if (doesExists)
-            await ThrowBusinessException(UsersMessages.UserMailAlreadyExists);
+            await ThrowBusinessException(UsersMessages.UserMailAlreadyExists, UsersMessages.SectionName);
     }
 }
