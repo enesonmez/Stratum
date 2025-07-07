@@ -15,6 +15,7 @@ public class BaseDbContext : DbContext
     public DbSet<ResourceTranslation> ResourceTranslations { get; set; }
     // Authentication
     public DbSet<User> Users { get; set; }      
+    public DbSet<OperationClaim> OperationClaims { get; set; }      
 
     public BaseDbContext(DbContextOptions dbContextOptions, IConfiguration configuration)
         : base(dbContextOptions)

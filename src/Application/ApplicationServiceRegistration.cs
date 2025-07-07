@@ -2,6 +2,7 @@ using System.Reflection;
 using Application.Services.OperationClaimService.Contracts;
 using Application.Services.UserService.Contracts;
 using Core.Application.Pipelines.Logging;
+using Core.Application.Pipelines.Performance;
 using Core.Application.Pipelines.Validation;
 using Core.Application.Rules;
 using Core.CrossCuttingConcerns.Logging.Abstraction;
@@ -27,6 +28,7 @@ public static class ApplicationServiceRegistration
         services.AddMediatR(mediatRServiceConfiguration =>
         {
             mediatRServiceConfiguration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            mediatRServiceConfiguration.AddOpenBehavior(typeof(PerformanceBehavior<,>));
             mediatRServiceConfiguration.AddOpenBehavior(typeof(LoggingBehavior<,>));
             mediatRServiceConfiguration.AddOpenBehavior(typeof(RequestValidationBehavior<,>));
         });
