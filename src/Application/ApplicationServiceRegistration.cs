@@ -3,6 +3,7 @@ using Application.Services.OperationClaimService.Contracts;
 using Application.Services.UserService.Contracts;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Performance;
+using Core.Application.Pipelines.Transaction;
 using Core.Application.Pipelines.Validation;
 using Core.Application.Rules;
 using Core.CrossCuttingConcerns.Logging.Abstraction;
@@ -31,13 +32,14 @@ public static class ApplicationServiceRegistration
             mediatRServiceConfiguration.AddOpenBehavior(typeof(PerformanceBehavior<,>));
             mediatRServiceConfiguration.AddOpenBehavior(typeof(LoggingBehavior<,>));
             mediatRServiceConfiguration.AddOpenBehavior(typeof(RequestValidationBehavior<,>));
+            mediatRServiceConfiguration.AddOpenBehavior(typeof(TransactionScopeBehavior<,>));
         });
         
         // Business Rules
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
         
         // Logging
-        var fileLogConfiguration = GetConfiguration(configuration);
+        var fileLogConfiguration = GetFileLogConfiguration(configuration);
         services.AddSingleton<ILogger, SerilogFileLogger>(_ => new SerilogFileLogger(fileLogConfiguration));
         
         // Services
@@ -67,7 +69,7 @@ public static class ApplicationServiceRegistration
         return services;
     }
 
-    private static FileLogConfiguration GetConfiguration(IConfiguration configuration)
+    private static FileLogConfiguration GetFileLogConfiguration(IConfiguration configuration)
     {
         var fileLogConfiguration = configuration.GetSection("SeriLogConfigurations:FileLogConfiguration")
                                        .Get<FileLogConfiguration>()

@@ -2,6 +2,7 @@ using Application.Repositories.OperationClaims;
 using Application.Repositories.Users;
 using Core.Localization.DB.Repositories.Resources;
 using Core.Persistence.DI;
+using Core.Persistence.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,8 @@ public static class PersistenceServiceRegistration
     {
         services.AddDbContext<BaseDbContext>(options => options.UseInMemoryDatabase("BaseDb"));
         services.AddDbMigrationApplier(buildServices => buildServices.GetRequiredService<BaseDbContext>());
+
+        services.AddScoped<IUnitOfWork, EfUnitOfWork<BaseDbContext>>();
         
         services.AddScoped<IResourceReadRepository, ResourceReadRepository<BaseDbContext>>();
         

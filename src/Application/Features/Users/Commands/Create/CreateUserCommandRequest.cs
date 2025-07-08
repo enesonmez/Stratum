@@ -1,10 +1,12 @@
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Performance;
+using Core.Application.Pipelines.Transaction;
 using MediatR;
 
 namespace Application.Features.Users.Commands.Create;
 
-public class CreateUserCommandRequest : IRequest<CreatedUserCommandResponse>, ILoggableRequest, IPerformanceRequest
+public class CreateUserCommandRequest : IRequest<CreatedUserCommandResponse>, ILoggableRequest, IPerformanceRequest,
+    ITransactionalRequest
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
@@ -17,7 +19,6 @@ public class CreateUserCommandRequest : IRequest<CreatedUserCommandResponse>, IL
         LastName = string.Empty;
         Email = string.Empty;
         Password = string.Empty;
-        
     }
 
     public CreateUserCommandRequest(string firstName, string lastName, string email, string password)

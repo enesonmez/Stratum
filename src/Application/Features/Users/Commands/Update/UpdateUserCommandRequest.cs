@@ -1,8 +1,9 @@
+using Core.Application.Pipelines.Transaction;
 using MediatR;
 
 namespace Application.Features.Users.Commands.Update;
 
-public class UpdateUserCommandRequest : IRequest<UpdatedUserCommandResponse>
+public class UpdateUserCommandRequest : IRequest<UpdatedUserCommandResponse>, ITransactionalRequest
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; }

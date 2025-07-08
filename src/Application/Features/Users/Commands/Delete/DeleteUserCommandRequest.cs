@@ -1,8 +1,9 @@
+using Core.Application.Pipelines.Transaction;
 using MediatR;
 
 namespace Application.Features.Users.Commands.Delete;
 
-public class DeleteUserCommandRequest : IRequest<DeletedUserCommandResponse>
+public class DeleteUserCommandRequest : IRequest<DeletedUserCommandResponse>, ITransactionalRequest
 {
     public Guid Id { get; set; }
 
