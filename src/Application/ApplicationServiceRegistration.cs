@@ -40,7 +40,8 @@ public static class ApplicationServiceRegistration
         
         // Logging
         var fileLogConfiguration = GetFileLogConfiguration(configuration);
-        services.AddSingleton<ILogger, SerilogFileLogger>(_ => new SerilogFileLogger(fileLogConfiguration));
+        services.AddSingleton<ISeriLogSinkProvider>(new SerilogFileLogSinkProvider(fileLogConfiguration));
+        services.AddSingleton<ILogger, SeriLogLogger>();
         
         // Services
         services.AddScoped<IUserService, UserManager>();
