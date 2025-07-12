@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Application.Repositories.OperationClaims;
 using Application.Services.OperationClaimService.Rules;
+using Core.Persistence.Paging;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -43,7 +44,26 @@ public class OperationClaimManager : IOperationClaimService
             enableTracking: enableTracking, cancellationToken: cancellationToken);
 
         await _operationClaimBusinessRules.OperationClaimShouldExistWhenSelected(operationClaim);
-        
+
         return operationClaim!;
+    }
+
+    public async Task<IPaginate<OperationClaim>> GetListAsync(Expression<Func<OperationClaim, bool>>? predicate = null,
+        Func<IQueryable<OperationClaim>, IOrderedQueryable<OperationClaim>>? orderBy = null,
+        Func<IQueryable<OperationClaim>, IIncludableQueryable<OperationClaim, object>>? include = null, int index = 0,
+        int size = 10, bool withDeleted = false, bool enableTracking = true,
+        CancellationToken cancellationToken = default)
+    {
+        IPaginate<OperationClaim> operationClaimList = await _operationClaimReadRepository.GetListAsync(
+            predicate,
+            orderBy,
+            include,
+            index,
+            size,
+            withDeleted,
+            enableTracking,
+            cancellationToken
+        );
+        return operationClaimList;
     }
 }

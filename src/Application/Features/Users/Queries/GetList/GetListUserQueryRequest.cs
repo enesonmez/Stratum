@@ -1,10 +1,11 @@
+using Core.Application.Pipelines.Performance;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using MediatR;
 
 namespace Application.Features.Users.Queries.GetList;
 
-public class GetListUserQueryRequest : IRequest<GetListResponse<GetListUserListItemDto>>
+public class GetListUserQueryRequest : IRequest<GetListResponse<GetListUserListItemDto>>, IPerformanceRequest
 {
     public PageRequest PageRequest { get; set; }
     
@@ -17,4 +18,6 @@ public class GetListUserQueryRequest : IRequest<GetListResponse<GetListUserListI
     {
         PageRequest = pageRequest;
     }
+
+    int IPerformanceRequest.Interval => 0;
 }
