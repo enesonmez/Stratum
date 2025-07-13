@@ -23,16 +23,14 @@ public class OperationClaimManager : IOperationClaimService
     }
 
     public async Task<OperationClaim?> GetAsync(Expression<Func<OperationClaim, bool>> predicate,
-        Func<IQueryable<OperationClaim>, IIncludableQueryable<OperationClaim, object>>? include = null,
         bool withDeleted = false, bool enableTracking = true,
         CancellationToken cancellationToken = default)
     {
         OperationClaim? operationClaim = await _operationClaimReadRepository.GetAsync(
-            predicate,
-            include,
-            withDeleted,
-            enableTracking,
-            cancellationToken
+            predicate:predicate,
+            withDeleted:withDeleted,
+            enableTracking:enableTracking,
+            cancellationToken:cancellationToken
         );
         return operationClaim;
     }
@@ -49,20 +47,18 @@ public class OperationClaimManager : IOperationClaimService
     }
 
     public async Task<IPaginate<OperationClaim>> GetListAsync(Expression<Func<OperationClaim, bool>>? predicate = null,
-        Func<IQueryable<OperationClaim>, IOrderedQueryable<OperationClaim>>? orderBy = null,
-        Func<IQueryable<OperationClaim>, IIncludableQueryable<OperationClaim, object>>? include = null, int index = 0,
+        Func<IQueryable<OperationClaim>, IOrderedQueryable<OperationClaim>>? orderBy = null, int index = 0,
         int size = 10, bool withDeleted = false, bool enableTracking = true,
         CancellationToken cancellationToken = default)
     {
         IPaginate<OperationClaim> operationClaimList = await _operationClaimReadRepository.GetListAsync(
-            predicate,
-            orderBy,
-            include,
-            index,
-            size,
-            withDeleted,
-            enableTracking,
-            cancellationToken
+            predicate:predicate,
+            orderBy:orderBy,
+            index:index,
+            size:size,
+            withDeleted:withDeleted,
+            enableTracking:enableTracking,
+            cancellationToken:cancellationToken
         );
         return operationClaimList;
     }

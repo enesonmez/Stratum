@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Core.Persistence.Paging;
+using Domain.Dtos;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -9,7 +10,6 @@ public interface IUserOperationClaimService
 {
     Task<UserOperationClaim?> GetAsync(
         Expression<Func<UserOperationClaim, bool>> predicate,
-        Func<IQueryable<UserOperationClaim>, IIncludableQueryable<UserOperationClaim, object>>? include = null,
         bool withDeleted = false,
         bool enableTracking = true,
         CancellationToken cancellationToken = default
@@ -25,7 +25,16 @@ public interface IUserOperationClaimService
     Task<IPaginate<UserOperationClaim>> GetListAsync(
         Expression<Func<UserOperationClaim, bool>>? predicate = null,
         Func<IQueryable<UserOperationClaim>, IOrderedQueryable<UserOperationClaim>>? orderBy = null,
-        Func<IQueryable<UserOperationClaim>, IIncludableQueryable<UserOperationClaim, object>>? include = null,
+        int index = 0,
+        int size = 10,
+        bool withDeleted = false,
+        bool enableTracking = true,
+        CancellationToken cancellationToken = default
+    );
+    
+    Task<IPaginate<UserOperationClaimListItemDto>> GetListUserOperationClaimDtoAsync(
+        Expression<Func<UserOperationClaim, bool>>? predicate = null,
+        Func<IQueryable<UserOperationClaim>, IOrderedQueryable<UserOperationClaim>>? orderBy = null,
         int index = 0,
         int size = 10,
         bool withDeleted = false,

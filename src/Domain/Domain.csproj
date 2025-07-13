@@ -7,6 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Reference Include="Core.Application">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Application\bin\Debug\net9.0\Core.Application.dll</HintPath>
+      </Reference>
       <Reference Include="Core.Persistence">
         <HintPath>..\..\..\Stratum.Core\src\Core.Security\bin\Debug\net9.0\Core.Persistence.dll</HintPath>
       </Reference>

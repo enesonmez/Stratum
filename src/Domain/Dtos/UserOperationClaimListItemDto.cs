@@ -1,8 +1,8 @@
 using Core.Application.Dtos;
 
-namespace Application.Features.UserOperationClaims.Queries.GetList;
+namespace Domain.Dtos;
 
-public class GetListUserOperationClaimListItemDto : IDto
+public class UserOperationClaimListItemDto : IDto
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }

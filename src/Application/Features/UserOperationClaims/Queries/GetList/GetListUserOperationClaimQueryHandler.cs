@@ -2,6 +2,7 @@ using Application.Services.UserOperationClaimService.Contracts;
 using AutoMapper;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
+using Domain.Dtos;
 using Domain.Entities;
 using MediatR;
 
@@ -22,11 +23,13 @@ public class GetListUserOperationClaimQueryHandler : IRequestHandler<GetListUser
     public async Task<GetListResponse<GetListUserOperationClaimListItemDto>> Handle(
         GetListUserOperationClaimQueryRequest request, CancellationToken cancellationToken)
     {
-        IPaginate<UserOperationClaim> userOperationClaims = await _userOperationClaimService.GetListAsync(
-            index: request.PageRequest.PageIndex,
-            size: request.PageRequest.PageSize,
-            enableTracking: false
-        );
+        IPaginate<UserOperationClaimListItemDto> userOperationClaims =
+            await _userOperationClaimService.GetListUserOperationClaimDtoAsync(
+                index: request.PageRequest.PageIndex,
+                size: request.PageRequest.PageSize,
+                enableTracking: false,
+                cancellationToken: cancellationToken
+            );
 
         GetListResponse<GetListUserOperationClaimListItemDto> response =
             _mapper.Map<GetListResponse<GetListUserOperationClaimListItemDto>>(userOperationClaims);
