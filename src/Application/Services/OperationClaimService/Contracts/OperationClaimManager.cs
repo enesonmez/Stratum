@@ -70,8 +70,17 @@ public class OperationClaimManager : IOperationClaimService
     public async Task<OperationClaim> AddAsync(OperationClaim operationClaim)
     {
         await _operationClaimBusinessRules.OperationClaimNameShouldNotExistWhenCreating(operationClaim.Name);
-        
+
         OperationClaim addedOperationClaim = await _operationClaimWriteRepository.AddAsync(operationClaim);
         return addedOperationClaim;
+    }
+
+    public async Task<OperationClaim> UpdateAsync(OperationClaim operationClaim)
+    {
+        await _operationClaimBusinessRules.OperationClaimNameShouldNotExistWhenUpdating(operationClaim.Id,
+            operationClaim.Name);
+        
+        OperationClaim updatedOperationClaim = await _operationClaimWriteRepository.UpdateAsync(operationClaim);
+        return updatedOperationClaim;
     }
 }

@@ -1,4 +1,5 @@
 using Application.Features.OperationClaims.Commands.Create;
+using Application.Features.OperationClaims.Commands.Update;
 using Application.Features.OperationClaims.Queries.GetById;
 using Application.Features.OperationClaims.Queries.GetList;
 using Core.Application.Requests;
@@ -31,6 +32,13 @@ namespace WebApi.Controllers
         {
             CreatedOperationClaimCommandResponse result = await Mediator.Send(createOperationClaimCommand);
             return Created(uri:"", value:result);       
+        }
+        
+        [HttpPut]
+        public async Task<ActionResult<UpdatedOperationClaimCommandResponse>> Add([FromBody] UpdateOperationClaimCommandRequest updateOperationClaimCommand)
+        {
+            UpdatedOperationClaimCommandResponse result = await Mediator.Send(updateOperationClaimCommand);
+            return Ok(result);       
         }
     }
 }

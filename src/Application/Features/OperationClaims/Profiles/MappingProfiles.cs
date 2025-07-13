@@ -1,4 +1,5 @@
 using Application.Features.OperationClaims.Commands.Create;
+using Application.Features.OperationClaims.Commands.Update;
 using Application.Features.OperationClaims.Queries.GetById;
 using Application.Features.OperationClaims.Queries.GetList;
 using AutoMapper;
@@ -14,6 +15,8 @@ public class MappingProfiles : Profile
     {
         CreateMap<OperationClaim, CreateOperationClaimCommandRequest>().ReverseMap();
         CreateMap<OperationClaim, CreatedOperationClaimCommandResponse>().ReverseMap();
+        CreateMap<OperationClaim, UpdateOperationClaimCommandRequest>().ReverseMap();
+        CreateMap<OperationClaim, UpdatedOperationClaimCommandResponse>().ReverseMap();
         CreateMap<OperationClaim, GetByIdOperationClaimQueryResponse>().ReverseMap();
         CreateMap<OperationClaim, GetListOperationClaimListItemDto>().ReverseMap();
         CreateMap<IPaginate<OperationClaim>, GetListResponse<GetListOperationClaimListItemDto>>().ReverseMap();

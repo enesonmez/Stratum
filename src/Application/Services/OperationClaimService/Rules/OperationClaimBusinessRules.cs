@@ -29,4 +29,11 @@ public class OperationClaimBusinessRules : BaseBusinessRules
         if (doesExist)
             await ThrowBusinessException(OperationClaimsMessages.AlreadyExists, OperationClaimsMessages.SectionName);
     }
+    
+    public async Task OperationClaimNameShouldNotExistWhenUpdating(int id, string name)
+    {
+        bool doesExist = await _operationClaimReadRepository.AnyAsync(predicate: b => b.Id != id && b.Name == name);
+        if (doesExist)
+            await ThrowBusinessException(OperationClaimsMessages.AlreadyExists, OperationClaimsMessages.SectionName);
+    }
 }
