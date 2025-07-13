@@ -1,3 +1,4 @@
+using Core.Security.Hashing;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -24,7 +25,32 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasQueryFilter(u => !u.DeletedDate.HasValue);
 
-
+        builder.HasData(Seeds);
+        
         builder.HasBaseType((string)null!);
+    }
+
+    private static Guid AdminId { get; } = Guid.NewGuid();
+    private IEnumerable<User> Seeds
+    {
+        get
+        {
+            HashingHelper.CreatePasswordHash(
+                password: "123456",
+                passwordHash: out byte[] passwordHash,
+                passwordSalt: out byte[] passwordSalt
+            );
+            User adminUser =
+                new()
+                {
+                    Id = AdminId,
+                    Email = "stratum@gmail.com",
+                    FirstName = "Stratum",
+                    LastName = "Stratum",
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt
+                };
+            yield return adminUser;
+        }
     }
 }
