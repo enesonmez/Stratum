@@ -79,8 +79,16 @@ public class OperationClaimManager : IOperationClaimService
     {
         await _operationClaimBusinessRules.OperationClaimNameShouldNotExistWhenUpdating(operationClaim.Id,
             operationClaim.Name);
-        
+
         OperationClaim updatedOperationClaim = await _operationClaimWriteRepository.UpdateAsync(operationClaim);
         return updatedOperationClaim;
+    }
+
+    public async Task<OperationClaim> DeleteAsync(OperationClaim operationClaim, bool permanent = false)
+    {
+        OperationClaim deletedOperationClaim =
+            await _operationClaimWriteRepository.DeleteAsync(operationClaim, permanent);
+
+        return deletedOperationClaim;
     }
 }
