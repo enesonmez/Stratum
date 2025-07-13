@@ -56,6 +56,15 @@
       <None Update="Features\OperationClaims\Resources\Locales\operation-claims.tr.yaml">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="Features\UserOperationClaims\Resources\Locales\user-operation-claims.en.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Features\UserOperationClaims\Resources\Locales\user-operation-claims.tr.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Features\UserOperationClaims\Commands\" />
     </ItemGroup>
 
 </Project>
