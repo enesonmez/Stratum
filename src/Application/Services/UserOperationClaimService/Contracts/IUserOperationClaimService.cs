@@ -41,4 +41,6 @@ public interface IUserOperationClaimService
         bool enableTracking = true,
         CancellationToken cancellationToken = default
     );
+
+    Task<UserOperationClaim> AddAsync(UserOperationClaim userOperationClaim);
 }

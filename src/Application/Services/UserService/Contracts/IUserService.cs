@@ -30,6 +30,12 @@ public interface IUserService
         bool enableTracking = true,
         CancellationToken cancellationToken = default
     );
+    
+    Task<bool> AnyAsync(
+        Expression<Func<User, bool>>? predicate = null,
+        bool withDeleted = false,
+        CancellationToken cancellationToken = default
+    );
 
     Task<User> AddAsync(User user);
     Task<User> CreateAsync(User user, string password);

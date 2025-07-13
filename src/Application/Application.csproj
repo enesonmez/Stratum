@@ -63,8 +63,5 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Features\UserOperationClaims\Commands\" />
-    </ItemGroup>
 
 </Project>

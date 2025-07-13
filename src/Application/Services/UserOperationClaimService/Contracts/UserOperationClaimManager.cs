@@ -80,4 +80,9 @@ public class UserOperationClaimManager : IUserOperationClaimService
             cancellationToken: cancellationToken
         );
     }
+
+    public async Task<UserOperationClaim> AddAsync(UserOperationClaim userOperationClaim)
+    {
+        return await _userOperationClaimWriteRepository.AddAsync(userOperationClaim);
+    }
 }

@@ -53,15 +53,28 @@ public class UserManager : IUserService
         CancellationToken cancellationToken = default)
     {
         IPaginate<User> userList = await _userReadRepository.GetListAsync(
-            predicate:predicate,
-            orderBy:orderBy,
-            index:index,
-            size:size,
-            withDeleted:withDeleted,
-            enableTracking:enableTracking,
-            cancellationToken:cancellationToken
+            predicate: predicate,
+            orderBy: orderBy,
+            index: index,
+            size: size,
+            withDeleted: withDeleted,
+            enableTracking: enableTracking,
+            cancellationToken: cancellationToken
         );
         return userList;
+    }
+
+    public async Task<bool> AnyAsync(
+        Expression<Func<User, bool>>? predicate = null,
+        bool withDeleted = false,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return await _userReadRepository.AnyAsync(
+            predicate: predicate,
+            withDeleted: withDeleted,
+            cancellationToken: cancellationToken
+        );
     }
 
     public async Task<User> AddAsync(User user)
