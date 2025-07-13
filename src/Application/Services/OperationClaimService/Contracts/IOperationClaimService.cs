@@ -32,4 +32,6 @@ public interface IOperationClaimService
         bool enableTracking = true,
         CancellationToken cancellationToken = default
     );
+    
+    Task<OperationClaim> AddAsync(OperationClaim operationClaim);
 }

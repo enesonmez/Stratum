@@ -46,10 +46,6 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.1" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Features\OperationClaims\Commands\" />
-    </ItemGroup>
     <ItemGroup>
       <None Update="Features\**\Resources\Locales\*.*.yaml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

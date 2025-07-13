@@ -1,8 +1,8 @@
+using Application.Features.OperationClaims.Commands.Create;
 using Application.Features.OperationClaims.Queries.GetById;
 using Application.Features.OperationClaims.Queries.GetList;
 using Core.Application.Requests;
 using Core.Application.Responses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -24,6 +24,13 @@ namespace WebApi.Controllers
             GetListOperationClaimQueryRequest getListOperationClaimQuery = new() { PageRequest = pageRequest };
             GetListResponse<GetListOperationClaimListItemDto> result = await Mediator.Send(getListOperationClaimQuery);
             return Ok(result);
+        }
+        
+        [HttpPost]
+        public async Task<ActionResult<CreatedOperationClaimCommandResponse>> Add([FromBody] CreateOperationClaimCommandRequest createOperationClaimCommand)
+        {
+            CreatedOperationClaimCommandResponse result = await Mediator.Send(createOperationClaimCommand);
+            return Created(uri:"", value:result);       
         }
     }
 }

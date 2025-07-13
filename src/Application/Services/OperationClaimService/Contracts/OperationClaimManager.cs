@@ -66,4 +66,12 @@ public class OperationClaimManager : IOperationClaimService
         );
         return operationClaimList;
     }
+
+    public async Task<OperationClaim> AddAsync(OperationClaim operationClaim)
+    {
+        await _operationClaimBusinessRules.OperationClaimNameShouldNotExistWhenCreating(operationClaim.Name);
+        
+        OperationClaim addedOperationClaim = await _operationClaimWriteRepository.AddAsync(operationClaim);
+        return addedOperationClaim;
+    }
 }
