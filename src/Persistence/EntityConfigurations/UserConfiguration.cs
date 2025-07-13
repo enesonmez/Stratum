@@ -24,13 +24,15 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.LastName).HasColumnName("LastName").IsRequired();
 
         builder.HasQueryFilter(u => !u.DeletedDate.HasValue);
+        
+        builder.HasMany(u=>u.UserOperationClaims).WithOne(uoc=>uoc.User).HasForeignKey(uoc=>uoc.UserId);
 
         builder.HasData(Seeds);
         
         builder.HasBaseType((string)null!);
     }
 
-    private static Guid AdminId { get; } = Guid.NewGuid();
+    public static Guid AdminId { get; } = Guid.NewGuid();
     private IEnumerable<User> Seeds
     {
         get

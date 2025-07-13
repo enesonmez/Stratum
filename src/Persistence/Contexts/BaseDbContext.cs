@@ -16,6 +16,7 @@ public class BaseDbContext : DbContext
     // Authentication
     public DbSet<User> Users { get; set; }      
     public DbSet<OperationClaim> OperationClaims { get; set; }      
+    public DbSet<UserOperationClaim> UserOperationClaims { get; set; }      
 
     public BaseDbContext(DbContextOptions dbContextOptions, IConfiguration configuration)
         : base(dbContextOptions)

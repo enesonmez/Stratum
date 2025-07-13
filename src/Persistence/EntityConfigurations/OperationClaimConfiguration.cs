@@ -11,22 +11,25 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
     public void Configure(EntityTypeBuilder<OperationClaim> builder)
     {
         builder.ToTable("OperationClaims").HasKey(oc => oc.Id);
-        
+
         builder.Property(oc => oc.Id).HasColumnName("Id").IsRequired();
         builder.Property(oc => oc.Name).HasColumnName("Name").IsRequired();
         builder.Property(oc => oc.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(oc => oc.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(oc => oc.DeletedDate).HasColumnName("DeletedDate");
-        
+
         builder.HasQueryFilter(oc => !oc.DeletedDate.HasValue);
 
+        builder.HasMany(oc => oc.UserOperationClaims).WithOne(uoc => uoc.OperationClaim)
+            .HasForeignKey(uoc => uoc.OperationClaimId);
+
         builder.HasData(Seeds);
-        
+
         builder.HasBaseType((string)null!);
-        
     }
 
-    private static int AdminId => 1;
+    public static int AdminId => 1;
+
     private IEnumerable<OperationClaim> Seeds
     {
         get
@@ -38,8 +41,8 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
                 yield return claim;
         }
     }
-    
-    #pragma warning disable S1854 // Unused assignments should be removed
+
+#pragma warning disable S1854 // Unused assignments should be removed
     private IEnumerable<OperationClaim> GetFeatureOperationClaims(int initialId)
     {
         var lastId = initialId;
@@ -57,6 +60,7 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
         // #endregion
 
         #region OperationClaims
+
         featureOperationClaims.AddRange(
             [
                 new OperationClaim { Id = ++lastId, Name = OperationClaimsOperationClaims.Admin },
@@ -67,6 +71,7 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
                 new OperationClaim { Id = ++lastId, Name = OperationClaimsOperationClaims.Delete },
             ]
         );
+
         #endregion
 
         // #region UserOperationClaims
@@ -83,6 +88,7 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
         // #endregion
 
         #region Users
+
         featureOperationClaims.AddRange(
             [
                 new OperationClaim { Id = ++lastId, Name = UsersOperationClaims.Admin },
@@ -93,9 +99,10 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
                 new OperationClaim { Id = ++lastId, Name = UsersOperationClaims.Delete },
             ]
         );
+
         #endregion
 
         return featureOperationClaims;
     }
-    #pragma warning restore S1854 // Unused assignments should be removed
+#pragma warning restore S1854 // Unused assignments should be removed
 }
