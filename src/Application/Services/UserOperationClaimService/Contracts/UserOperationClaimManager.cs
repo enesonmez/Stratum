@@ -83,6 +83,20 @@ public class UserOperationClaimManager : IUserOperationClaimService
 
     public async Task<UserOperationClaim> AddAsync(UserOperationClaim userOperationClaim)
     {
+        await _userOperationClaimBusinessRules.UserShouldNotHasOperationClaimAlreadyWhenInsert(
+            userOperationClaim.UserId, userOperationClaim.OperationClaimId);
+        
         return await _userOperationClaimWriteRepository.AddAsync(userOperationClaim);
+    }
+
+    public async Task<UserOperationClaim> UpdateAsync(UserOperationClaim userOperationClaim)
+    {
+        await _userOperationClaimBusinessRules.UserShouldNotHasOperationClaimAlreadyWhenUpdated(
+            userOperationClaim.Id,
+            userOperationClaim.UserId, 
+            userOperationClaim.OperationClaimId
+        );
+        
+        return await _userOperationClaimWriteRepository.UpdateAsync(userOperationClaim);
     }
 }
