@@ -1,5 +1,6 @@
 using System.Reflection;
 using Application.Services.OperationClaimService.Contracts;
+using Application.Services.UserOperationClaimService.Contracts;
 using Application.Services.UserService.Contracts;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Performance;
@@ -46,6 +47,7 @@ public static class ApplicationServiceRegistration
         // Services
         services.AddScoped<IUserService, UserManager>();
         services.AddScoped<IOperationClaimService, OperationClaimManager>();
+        services.AddScoped<IUserOperationClaimService, UserOperationClaimManager>();
         
         // Localization
         services.AddFileLocalization(Assembly.GetExecutingAssembly());
