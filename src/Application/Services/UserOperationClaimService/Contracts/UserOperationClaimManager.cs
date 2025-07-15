@@ -99,4 +99,9 @@ public class UserOperationClaimManager : IUserOperationClaimService
         
         return await _userOperationClaimWriteRepository.UpdateAsync(userOperationClaim);
     }
+
+    public async Task<UserOperationClaim> DeleteAsync(UserOperationClaim userOperationClaim, bool permanent = false)
+    {
+        return await _userOperationClaimWriteRepository.DeleteAsync(userOperationClaim, permanent);
+    }
 }

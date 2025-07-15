@@ -1,4 +1,5 @@
 using Application.Features.UserOperationClaims.Commands.Create;
+using Application.Features.UserOperationClaims.Commands.Delete;
 using Application.Features.UserOperationClaims.Commands.Update;
 using Application.Features.UserOperationClaims.Queries.GetById;
 using Application.Features.UserOperationClaims.Queries.GetList;
@@ -10,7 +11,7 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserOperationClaimController : BaseController
+    public class UserOperationClaimsController : BaseController
     {
         [HttpGet]
         public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
@@ -44,6 +45,15 @@ namespace WebApi.Controllers
         {
             UpdatedUserOperationClaimCommandResponse result =
                 await Mediator.Send(updateUserOperationClaimCommandRequest);
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<DeletedUserOperationClaimCommandResponse>> Delete(
+            [FromBody] DeleteUserOperationClaimCommandRequest deleteUserOperationClaimCommandRequest)
+        {
+            DeletedUserOperationClaimCommandResponse result =
+                await Mediator.Send(deleteUserOperationClaimCommandRequest);
             return Ok(result);
         }
     }
