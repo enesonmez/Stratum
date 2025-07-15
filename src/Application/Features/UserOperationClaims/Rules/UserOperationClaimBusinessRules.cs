@@ -4,7 +4,7 @@ using Core.Application.Rules;
 using Core.Localization.Abstraction;
 using Domain.Entities;
 
-namespace Application.Services.UserOperationClaimService.Rules;
+namespace Application.Features.UserOperationClaims.Rules;
 
 public class UserOperationClaimBusinessRules : BaseBusinessRules
 {

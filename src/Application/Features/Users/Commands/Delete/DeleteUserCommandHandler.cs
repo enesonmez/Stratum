@@ -1,4 +1,5 @@
-using Application.Services.UserService.Contracts;
+using Application.Features.Users.Rules;
+using Application.Services.UserService;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -9,16 +10,26 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommandRequest
 {
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
+    private readonly UserBusinessRules _userBusinessRules;
 
-    public DeleteUserCommandHandler(IUserService userService, IMapper mapper)
+    public DeleteUserCommandHandler(IUserService userService, IMapper mapper, UserBusinessRules userBusinessRules)
     {
         _userService = userService;
         _mapper = mapper;
+        _userBusinessRules = userBusinessRules;
     }
 
-    public async Task<DeletedUserCommandResponse> Handle(DeleteUserCommandRequest request, CancellationToken cancellationToken)
+    public async Task<DeletedUserCommandResponse> Handle(DeleteUserCommandRequest request,
+        CancellationToken cancellationToken)
     {
-        User deletedUser = await _userService.DeleteByIdAsync(request.Id);
+        User? user = await _userService.GetByIdAsync(
+                request.Id, 
+                enableTracking: false, 
+                cancellationToken: cancellationToken
+        );
+        await _userBusinessRules.UserShouldBeExistsWhenSelected(user);
+
+        User deletedUser = await _userService.DeleteAsync(user!);
         return _mapper.Map<DeletedUserCommandResponse>(deletedUser);
     }
 }

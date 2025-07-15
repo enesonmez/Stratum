@@ -1,26 +1,21 @@
 using System.Linq.Expressions;
 using Application.Repositories.Users;
-using Application.Services.UserService.Rules;
 using Core.Persistence.Paging;
 using Core.Security.Hashing;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore.Query;
 
-namespace Application.Services.UserService.Contracts;
+namespace Application.Services.UserService;
 
 public class UserManager : IUserService
 {
     private readonly IUserWriteRepository _userWriteRepository;
     private readonly IUserReadRepository _userReadRepository;
-    private readonly UserBusinessRules _userBusinessRules;
 
     public UserManager(IUserWriteRepository userWriteRepository,
-        IUserReadRepository userReadRepository,
-        UserBusinessRules userBusinessRules)
+        IUserReadRepository userReadRepository)
     {
         _userWriteRepository = userWriteRepository;
         _userReadRepository = userReadRepository;
-        _userBusinessRules = userBusinessRules;
     }
 
     public async Task<User?> GetAsync(Expression<Func<User, bool>> predicate,
@@ -36,15 +31,13 @@ public class UserManager : IUserService
         return user;
     }
 
-    public async Task<User> GetByIdAsync(Guid id, bool withDeleted = false, bool enableTracking = true,
+    public async Task<User?> GetByIdAsync(Guid id, bool withDeleted = false, bool enableTracking = true,
         CancellationToken cancellationToken = default)
     {
         User? user = await GetAsync(u => u.Id.Equals(id), withDeleted: withDeleted, enableTracking: enableTracking,
             cancellationToken: cancellationToken);
 
-        await _userBusinessRules.UserShouldBeExistsWhenSelected(user);
-
-        return user!;
+        return user;
     }
 
     public async Task<IPaginate<User>> GetListAsync(Expression<Func<User, bool>>? predicate = null,
@@ -79,7 +72,6 @@ public class UserManager : IUserService
 
     public async Task<User> AddAsync(User user)
     {
-        await _userBusinessRules.UserEmailShouldNotExistsWhenInsert(user.Email);
         User addedUser = await _userWriteRepository.AddAsync(user);
 
         return addedUser;
@@ -87,8 +79,6 @@ public class UserManager : IUserService
 
     public async Task<User> CreateAsync(User user, string password)
     {
-        await _userBusinessRules.UserEmailShouldNotExistsWhenInsert(user.Email);
-
         HashingHelper.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
         user.PasswordHash = passwordHash;
         user.PasswordSalt = passwordSalt;
@@ -99,8 +89,6 @@ public class UserManager : IUserService
 
     public async Task<User> UpdateAsync(User user)
     {
-        await _userBusinessRules.UserEmailShouldNotExistsWhenUpdate(user.Id, user.Email);
-
         User updatedUser = await _userWriteRepository.UpdateAsync(user);
 
         return updatedUser;
@@ -120,16 +108,5 @@ public class UserManager : IUserService
         User deletedUser = await _userWriteRepository.DeleteAsync(user, permanent);
 
         return deletedUser;
-    }
-
-    public async Task<User> DeleteByIdAsync(Guid id, bool permanent = false)
-    {
-        User? user = await _userReadRepository.GetAsync(
-            predicate: u => u.Id.Equals(id)
-        );
-
-        await _userBusinessRules.UserShouldBeExistsWhenSelected(user);
-
-        return await DeleteAsync(user!, permanent);
     }
 }

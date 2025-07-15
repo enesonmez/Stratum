@@ -1,7 +1,7 @@
 using System.Reflection;
-using Application.Services.OperationClaimService.Contracts;
-using Application.Services.UserOperationClaimService.Contracts;
-using Application.Services.UserService.Contracts;
+using Application.Services.OperationClaimService;
+using Application.Services.UserOperationClaimService;
+using Application.Services.UserService;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Performance;
 using Core.Application.Pipelines.Transaction;

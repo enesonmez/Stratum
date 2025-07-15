@@ -1,5 +1,5 @@
-using Application.Services.UserService.Contracts;
-using Application.Services.UserService.Rules;
+using Application.Features.Users.Rules;
+using Application.Services.UserService;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -21,11 +21,14 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommandRequest
 
     public async Task<UpdatedUserCommandResponse> Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
     {
-        User user = await _userService.GetByIdAsync(
+        User? user = await _userService.GetByIdAsync(
             request.Id,
             enableTracking: false,
             cancellationToken: cancellationToken
         );
+
+        await _userBusinessRules.UserShouldBeExistsWhenSelected(user);
+        await _userBusinessRules.UserEmailShouldNotExistsWhenUpdate(user!.Id, request.Email);
         
         user = _mapper.Map(request, user);
         

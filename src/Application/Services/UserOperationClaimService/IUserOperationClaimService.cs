@@ -2,9 +2,8 @@ using System.Linq.Expressions;
 using Core.Persistence.Paging;
 using Domain.Dtos;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore.Query;
 
-namespace Application.Services.UserOperationClaimService.Contracts;
+namespace Application.Services.UserOperationClaimService;
 
 public interface IUserOperationClaimService
 {
@@ -15,7 +14,7 @@ public interface IUserOperationClaimService
         CancellationToken cancellationToken = default
     );
     
-    Task<UserOperationClaim> GetByIdAsync(
+    Task<UserOperationClaim?> GetByIdAsync(
         Guid id,
         bool withDeleted = false,
         bool enableTracking = true,

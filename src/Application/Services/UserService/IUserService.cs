@@ -1,9 +1,8 @@
 using System.Linq.Expressions;
 using Core.Persistence.Paging;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore.Query;
 
-namespace Application.Services.UserService.Contracts;
+namespace Application.Services.UserService;
 
 public interface IUserService
 {
@@ -14,7 +13,7 @@ public interface IUserService
         CancellationToken cancellationToken = default
     );
     
-    Task<User> GetByIdAsync(
+    Task<User?> GetByIdAsync(
         Guid id,
         bool withDeleted = false,
         bool enableTracking = true,
@@ -42,5 +41,4 @@ public interface IUserService
     Task<User> UpdateAsync(User user);
     Task<User> UpdateWithPasswordAsync(User user, string password);
     Task<User> DeleteAsync(User user, bool permanent = false);
-    Task<User> DeleteByIdAsync(Guid id, bool permanent = false);
 }

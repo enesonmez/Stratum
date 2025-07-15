@@ -1,11 +1,10 @@
 using Application.Features.Users.Constants;
 using Application.Repositories.Users;
 using Core.Application.Rules;
-using Core.CrossCuttingConcerns.Exception.Types;
 using Core.Localization.Abstraction;
 using Domain.Entities;
 
-namespace Application.Services.UserService.Rules;
+namespace Application.Features.Users.Rules;
 
 public class UserBusinessRules : BaseBusinessRules
 {

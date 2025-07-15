@@ -1,4 +1,4 @@
-using Application.Services.UserService.Contracts;
+using Application.Services.UserService;
 using AutoMapper;
 using Core.Application.Responses;
 using Core.Persistence.Paging;

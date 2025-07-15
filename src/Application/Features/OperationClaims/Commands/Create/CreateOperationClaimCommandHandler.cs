@@ -1,4 +1,5 @@
-using Application.Services.OperationClaimService.Contracts;
+using Application.Features.OperationClaims.Rules;
+using Application.Services.OperationClaimService;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -10,16 +11,21 @@ public class CreateOperationClaimCommandHandler : IRequestHandler<CreateOperatio
 {
     private readonly IOperationClaimService _operationClaimService;
     private readonly IMapper _mapper;
+    private readonly OperationClaimBusinessRules _operationClaimBusinessRules;
 
-    public CreateOperationClaimCommandHandler(IOperationClaimService operationClaimService, IMapper mapper)
+    public CreateOperationClaimCommandHandler(IOperationClaimService operationClaimService, IMapper mapper,
+        OperationClaimBusinessRules operationClaimBusinessRules)
     {
         _operationClaimService = operationClaimService;
         _mapper = mapper;
+        _operationClaimBusinessRules = operationClaimBusinessRules;
     }
 
     public async Task<CreatedOperationClaimCommandResponse> Handle(CreateOperationClaimCommandRequest request,
         CancellationToken cancellationToken)
     {
+        await _operationClaimBusinessRules.OperationClaimNameShouldNotExistWhenCreating(request.Name);
+        
         OperationClaim operationClaim = _mapper.Map<OperationClaim>(request);
         OperationClaim createdOperationClaim = await _operationClaimService.AddAsync(operationClaim);
 

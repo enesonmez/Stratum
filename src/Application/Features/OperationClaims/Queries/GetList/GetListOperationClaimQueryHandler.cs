@@ -1,4 +1,4 @@
-using Application.Services.OperationClaimService.Contracts;
+using Application.Services.OperationClaimService;
 using AutoMapper;
 using Core.Application.Responses;
 using Core.Persistence.Paging;

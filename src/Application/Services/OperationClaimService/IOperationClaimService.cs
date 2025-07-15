@@ -1,9 +1,8 @@
 using System.Linq.Expressions;
 using Core.Persistence.Paging;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore.Query;
 
-namespace Application.Services.OperationClaimService.Contracts;
+namespace Application.Services.OperationClaimService;
 
 public interface IOperationClaimService
 {
@@ -14,7 +13,7 @@ public interface IOperationClaimService
         CancellationToken cancellationToken = default
     );
     
-    Task<OperationClaim> GetByIdAsync(
+    Task<OperationClaim?> GetByIdAsync(
         int id,
         bool withDeleted = false,
         bool enableTracking = true,
