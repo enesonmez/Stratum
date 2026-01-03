@@ -1,4 +1,5 @@
 using Application.Repositories.OperationClaims;
+using Application.Repositories.RefreshTokens;
 using Application.Repositories.UserOperationClaims;
 using Application.Repositories.Users;
 using Core.Localization.DB.Repositories.Resources;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
 using Persistence.Repositories.OperationClaims;
+using Persistence.Repositories.RefreshTokens;
 using Persistence.Repositories.UserOperationClaims;
 using Persistence.Repositories.Users;
 
@@ -33,6 +35,9 @@ public static class PersistenceServiceRegistration
         
         services.AddScoped<IUserOperationClaimReadRepository, UserOperationClaimReadRepository>();
         services.AddScoped<IUserOperationClaimWriteRepository, UserOperationClaimWriteRepository>();
+        
+        services.AddScoped<IRefreshTokenReadRepository, RefreshTokenReadRepository>();
+        services.AddScoped<IRefreshTokenWriteRepository, RefreshTokenWriteRepository>();
         
         
         return services;

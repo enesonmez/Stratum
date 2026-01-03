@@ -1,8 +1,8 @@
+using Application.Dtos;
 using Application.Services.UserOperationClaimService;
 using AutoMapper;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
-using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.UserOperationClaims.Queries.GetList;

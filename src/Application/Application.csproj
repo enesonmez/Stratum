@@ -31,6 +31,9 @@
       <Reference Include="Core.Security">
         <HintPath>..\..\..\Stratum.Core\src\Core.Security\bin\Debug\net9.0\Core.Security.dll</HintPath>
       </Reference>
+      <Reference Include="Core.Security.DI">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Security.DI\bin\Debug\net9.0\Core.Security.DI.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
     <ItemGroup>

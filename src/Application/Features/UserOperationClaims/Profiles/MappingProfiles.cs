@@ -1,3 +1,4 @@
+using Application.Dtos;
 using Application.Features.UserOperationClaims.Commands.Create;
 using Application.Features.UserOperationClaims.Commands.Delete;
 using Application.Features.UserOperationClaims.Commands.Update;
@@ -6,7 +7,6 @@ using Application.Features.UserOperationClaims.Queries.GetList;
 using AutoMapper;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
-using Domain.Dtos;
 using Domain.Entities;
 
 namespace Application.Features.UserOperationClaims.Profiles;

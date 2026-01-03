@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
+using Application.Dtos;
 using Application.Repositories.UserOperationClaims;
 using Core.Persistence.Paging;
 using Core.Persistence.Repositories;
-using Domain.Dtos;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;

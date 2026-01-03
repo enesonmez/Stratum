@@ -8,12 +8,13 @@
 
     <ItemGroup>
         <PackageReference Include="MediatR" Version="12.4.1" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
         <PackageReference Include="Serilog" Version="4.2.0" />
         <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.2.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
         <PackageReference Include="YamlDotNet" Version="16.0.0" />
     </ItemGroup>
 
@@ -29,6 +30,15 @@
       </Reference>
       <Reference Include="Core.Persistence.WebApi">
         <HintPath>..\..\..\Stratum.Core\src\Core.Persistence.WebApi\bin\Debug\net9.0\Core.Persistence.WebApi.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Security">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Security\bin\Debug\net9.0\Core.Security.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Security.Swagger">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Security.Swagger\bin\Debug\net9.0\Core.Security.Swagger.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Security.WebApi">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Security.Swagger\bin\Debug\net9.0\Core.Security.Swagger.dll</HintPath>
       </Reference>
     </ItemGroup>
 

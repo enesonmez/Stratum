@@ -26,6 +26,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasQueryFilter(u => !u.DeletedDate.HasValue);
         
         builder.HasMany(u=>u.UserOperationClaims).WithOne(uoc=>uoc.User).HasForeignKey(uoc=>uoc.UserId);
+        builder.HasMany(u => u.RefreshTokens).WithOne(rt => rt.User).HasForeignKey(rt => rt.UserId);
 
         builder.HasData(Seeds);
         

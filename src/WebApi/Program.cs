@@ -3,6 +3,11 @@ using Core.CrossCuttingConcerns.Exception.WebApi.Extensions;
 using Core.Localization.WebApi;
 using Persistence;
 using Core.Persistence.WebApi;
+using Core.Security.Encryption;
+using Core.Security.Jwt;
+using Core.Security.Swagger.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,30 +18,49 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
+const string tokenOptionsConfigurationSection = "TokenOptions";
+TokenOptions tokenOptions =
+    builder.Configuration.GetSection(tokenOptionsConfigurationSection).Get<TokenOptions>()
+    ?? throw new InvalidOperationException(
+        $"\"{tokenOptionsConfigurationSection}\" section cannot found in configuration.");
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey),
+            ValidateIssuer = true,
+            ValidIssuer = tokenOptions.Issuer,
+            ValidateAudience = true,
+            ValidAudience = tokenOptions.Audience,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero,
+        };
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(opt =>
-    opt.AddDefaultPolicy(p =>
-    {
-        p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    })
+    opt.AddDefaultPolicy(p => { p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); })
 );
+
+builder.Services.AddJwtSwagger();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "OpenAPI v1"));
-}
+app.UseSwagger();
+app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "OpenAPI v1"));
 
-if (app.Environment.IsProduction())
+
+//if (app.Environment.IsProduction())
     app.ConfigureCustomExceptionMiddleware();
 
 app.UseDbMigrationApplier();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/", () => "Hello World!");
 app.MapControllers();

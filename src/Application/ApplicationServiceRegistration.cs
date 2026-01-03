@@ -2,6 +2,7 @@ using System.Reflection;
 using Application.Services.OperationClaimService;
 using Application.Services.UserOperationClaimService;
 using Application.Services.UserService;
+using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Performance;
 using Core.Application.Pipelines.Transaction;
@@ -14,6 +15,8 @@ using Core.Localization.DI;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Core.Security.DI;
+using Core.Security.Jwt;
 
 namespace Application;
 
@@ -30,8 +33,9 @@ public static class ApplicationServiceRegistration
         services.AddMediatR(mediatRServiceConfiguration =>
         {
             mediatRServiceConfiguration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-            mediatRServiceConfiguration.AddOpenBehavior(typeof(PerformanceBehavior<,>));
             mediatRServiceConfiguration.AddOpenBehavior(typeof(LoggingBehavior<,>));
+            mediatRServiceConfiguration.AddOpenBehavior(typeof(PerformanceBehavior<,>));
+            mediatRServiceConfiguration.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
             mediatRServiceConfiguration.AddOpenBehavior(typeof(RequestValidationBehavior<,>));
             mediatRServiceConfiguration.AddOpenBehavior(typeof(TransactionScopeBehavior<,>));
         });
@@ -52,6 +56,10 @@ public static class ApplicationServiceRegistration
         // Localization
         services.AddFileLocalization(Assembly.GetExecutingAssembly());
         // services.AddDbLocalization();
+        
+        // Security
+        var tokenOptions =  GetTokenOptions(configuration);
+        services.AddSecurityServices<Guid, int, Guid>(tokenOptions);
         
         return services;
     }
@@ -80,5 +88,16 @@ public static class ApplicationServiceRegistration
                                        "FileLogConfiguration section cannot found in configuration.");
 
         return fileLogConfiguration;
+    }
+    
+    private static TokenOptions GetTokenOptions(IConfiguration configuration)
+    {
+        const string tokenOptionsConfigurationSection = "TokenOptions";
+        TokenOptions tokenOptions =
+            configuration.GetSection(tokenOptionsConfigurationSection).Get<TokenOptions>()
+            ?? throw new InvalidOperationException(
+                $"\"{tokenOptionsConfigurationSection}\" section cannot found in configuration.");
+
+        return tokenOptions;
     }
 }

@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
+using Application.Dtos;
 using Core.Persistence.Paging;
 using Core.Persistence.Repositories;
-using Domain.Dtos;
 using Domain.Entities;
 
 namespace Application.Repositories.UserOperationClaims;
