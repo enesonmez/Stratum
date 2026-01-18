@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.UserOperationClaims.Mappers;
 using Domain.Entities;
 using Domain.Repositories.UserOperationClaims;
 using Domain.Services.UserOperationClaims;
@@ -11,12 +11,12 @@ public class CreateUserOperationClaimCommandHandler : IRequestHandler<CreateUser
 {
     private readonly UserOperationClaimDomainService _userOperationClaimDomainService;
     private readonly IUserOperationClaimWriteRepository _userOperationClaimWriteRepository;
-    private readonly IMapper _mapper;
+    private readonly UserOperationClaimMapper _mapper;
 
     public CreateUserOperationClaimCommandHandler(
         UserOperationClaimDomainService userOperationClaimDomainService,
         IUserOperationClaimWriteRepository userOperationClaimWriteRepository,
-        IMapper mapper)
+        UserOperationClaimMapper mapper)
     {
         _userOperationClaimDomainService = userOperationClaimDomainService;
         _userOperationClaimWriteRepository = userOperationClaimWriteRepository;
@@ -33,7 +33,7 @@ public class CreateUserOperationClaimCommandHandler : IRequestHandler<CreateUser
 
         await _userOperationClaimWriteRepository.AddAsync(userOperationClaim, cancellationToken);
 
-        CreatedUserOperationClaimCommandResponse response = _mapper.Map<CreatedUserOperationClaimCommandResponse>(userOperationClaim);
+        CreatedUserOperationClaimCommandResponse response = _mapper.ToCreatedUserOperationClaimResponse(userOperationClaim);
         return response;
     }
 }

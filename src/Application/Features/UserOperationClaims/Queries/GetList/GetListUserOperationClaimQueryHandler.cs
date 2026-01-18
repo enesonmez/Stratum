@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.UserOperationClaims.Mappers;
 using Core.Application.Responses;
 using Core.Persistence.Abstractions.Paging;
 using Domain.Entities;
@@ -11,9 +11,9 @@ public class GetListUserOperationClaimQueryHandler : IRequestHandler<GetListUser
     GetListResponse<GetListUserOperationClaimListItemDto>>
 {
     private readonly IUserOperationClaimReadRepository _userOperationClaimReadRepository;
-    private readonly IMapper _mapper;
+    private readonly UserOperationClaimMapper _mapper;
 
-    public GetListUserOperationClaimQueryHandler(IUserOperationClaimReadRepository userOperationClaimReadRepository, IMapper mapper)
+    public GetListUserOperationClaimQueryHandler(IUserOperationClaimReadRepository userOperationClaimReadRepository, UserOperationClaimMapper mapper)
     {
         _userOperationClaimReadRepository = userOperationClaimReadRepository;
         _mapper = mapper;
@@ -30,7 +30,7 @@ public class GetListUserOperationClaimQueryHandler : IRequestHandler<GetListUser
         );
 
         GetListResponse<GetListUserOperationClaimListItemDto> response =
-            _mapper.Map<GetListResponse<GetListUserOperationClaimListItemDto>>(userOperationClaims);
+            _mapper.ToGetListUserOperationClaimResponse(userOperationClaims);
         
         return response;
     }

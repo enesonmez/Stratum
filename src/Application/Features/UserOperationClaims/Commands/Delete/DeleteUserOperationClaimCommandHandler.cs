@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.UserOperationClaims.Mappers;
 using Domain.Entities;
 using Domain.Repositories.UserOperationClaims;
 using Domain.Services.UserOperationClaims;
@@ -11,12 +11,12 @@ public class DeleteUserOperationClaimCommandHandler : IRequestHandler<DeleteUser
 {
     private readonly UserOperationClaimDomainService _userOperationClaimDomainService;
     private readonly IUserOperationClaimWriteRepository _userOperationClaimWriteRepository;
-    private readonly IMapper _mapper;
+    private readonly UserOperationClaimMapper _mapper;
 
     public DeleteUserOperationClaimCommandHandler(
         UserOperationClaimDomainService userOperationClaimDomainService,
         IUserOperationClaimWriteRepository userOperationClaimWriteRepository,
-        IMapper mapper)
+        UserOperationClaimMapper mapper)
     {
         _userOperationClaimDomainService = userOperationClaimDomainService;
         _userOperationClaimWriteRepository = userOperationClaimWriteRepository;
@@ -30,7 +30,7 @@ public class DeleteUserOperationClaimCommandHandler : IRequestHandler<DeleteUser
 
         await _userOperationClaimWriteRepository.DeleteAsync(userOperationClaim, cancellationToken: cancellationToken);
 
-        DeletedUserOperationClaimCommandResponse response = _mapper.Map<DeletedUserOperationClaimCommandResponse>(userOperationClaim);
+        DeletedUserOperationClaimCommandResponse response = _mapper.ToDeletedUserOperationClaimResponse(userOperationClaim);
         return response;
     }
 }

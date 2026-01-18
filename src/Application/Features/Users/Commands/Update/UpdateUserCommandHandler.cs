@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.Users.Mappers;
 using Domain.Entities;
 using Domain.Repositories.Users;
 using Domain.Services.Users;
@@ -10,16 +10,16 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommandRequest
 {
     private readonly UserDomainService _userDomainService;
     private readonly IUserWriteRepository _userWriteRepository;
-    private readonly IMapper _mapper;
+    private readonly UserMapper _userMapper;
 
     public UpdateUserCommandHandler(
         UserDomainService userDomainService, 
         IUserWriteRepository userWriteRepository, 
-        IMapper mapper)
+        UserMapper userMapper)
     {
         _userDomainService = userDomainService;
         _userWriteRepository = userWriteRepository;
-        _mapper = mapper;
+        _userMapper = userMapper;
     }
 
     public async Task<UpdatedUserCommandResponse> Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommandRequest
 
         await _userWriteRepository.UpdateAsync(updatedUser, cancellationToken);
 
-        UpdatedUserCommandResponse response = _mapper.Map<UpdatedUserCommandResponse>(updatedUser);
+        UpdatedUserCommandResponse response = _userMapper.ToUpdatedUserCommandResponse(updatedUser);
         return response;
     }
 }

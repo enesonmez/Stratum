@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.OperationClaims.Mappers;
 using Domain.Entities;
 using Domain.Services.OperationClaims;
 using MediatR;
@@ -10,14 +10,14 @@ public class
     GetByIdOperationClaimQueryResponse>
 {
     private readonly OperationClaimDomainService _operationClaimDomainService;
-    private readonly IMapper _mapper;
+    private readonly OperationClaimMapper _operationClaimMapper;
 
     public GetByIdOperationClaimQueryHandler(
         OperationClaimDomainService operationClaimDomainService, 
-        IMapper mapper)
+        OperationClaimMapper operationClaimMapper)
     {
         _operationClaimDomainService = operationClaimDomainService;
-        _mapper = mapper;
+        _operationClaimMapper = operationClaimMapper;
     }
 
     public async Task<GetByIdOperationClaimQueryResponse> Handle(GetByIdOperationClaimQueryRequest request,
@@ -25,7 +25,7 @@ public class
     {
         OperationClaim operationClaim = await _operationClaimDomainService.GetOperationClaimByIdAsync(request.Id);
 
-        GetByIdOperationClaimQueryResponse response = _mapper.Map<GetByIdOperationClaimQueryResponse>(operationClaim);
+        GetByIdOperationClaimQueryResponse response = _operationClaimMapper.ToGetByIdOperationClaimResponse(operationClaim);
 
         return response;
     }

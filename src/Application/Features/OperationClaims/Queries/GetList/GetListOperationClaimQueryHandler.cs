@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.OperationClaims.Mappers;
 using Core.Application.Responses;
 using Core.Persistence.Abstractions.Paging;
 using Domain.Entities;
@@ -11,14 +11,14 @@ public class GetListOperationClaimQueryHandler : IRequestHandler<GetListOperatio
     GetListResponse<GetListOperationClaimListItemDto>>
 {
     private readonly IOperationClaimReadRepository _operationClaimReadRepository;
-    private readonly IMapper _mapper;
+    private readonly OperationClaimMapper _operationClaimMapper;
 
     public GetListOperationClaimQueryHandler(
         IOperationClaimReadRepository operationClaimReadRepository, 
-        IMapper mapper)
+        OperationClaimMapper operationClaimMapper)
     {
         _operationClaimReadRepository = operationClaimReadRepository;
-        _mapper = mapper;
+        _operationClaimMapper = operationClaimMapper;
     }
 
     public async Task<GetListResponse<GetListOperationClaimListItemDto>> Handle(GetListOperationClaimQueryRequest request,
@@ -31,7 +31,7 @@ public class GetListOperationClaimQueryHandler : IRequestHandler<GetListOperatio
             cancellationToken: cancellationToken
         );
 
-        var response = _mapper.Map<GetListResponse<GetListOperationClaimListItemDto>>(operationClaims);
+        var response = _operationClaimMapper.ToGetListOperationClaimResponse(operationClaims);
         return response;
     }
 }

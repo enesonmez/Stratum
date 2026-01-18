@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.OperationClaims.Mappers;
 using Domain.Entities;
 using Domain.Repositories.OperationClaims;
 using Domain.Services.OperationClaims;
@@ -12,16 +12,16 @@ public class
 {
     private readonly OperationClaimDomainService _operationClaimDomainService;
     private readonly IOperationClaimWriteRepository _operationClaimWriteRepository;
-    private readonly IMapper _mapper;
+    private readonly OperationClaimMapper _operationClaimMapper;
 
     public DeleteOperationClaimCommandHandler(
         OperationClaimDomainService operationClaimDomainService,
         IOperationClaimWriteRepository operationClaimWriteRepository,
-        IMapper mapper)
+        OperationClaimMapper operationClaimMapper)
     {
         _operationClaimDomainService = operationClaimDomainService;
         _operationClaimWriteRepository = operationClaimWriteRepository;
-        _mapper = mapper;
+        _operationClaimMapper = operationClaimMapper;
     }
 
     public async Task<DeletedOperationClaimCommandResponse> Handle(DeleteOperationClaimCommandRequest request,
@@ -31,7 +31,7 @@ public class
 
         await _operationClaimWriteRepository.DeleteAsync(operationClaimToDelete, cancellationToken: cancellationToken);
 
-        DeletedOperationClaimCommandResponse response = _mapper.Map<DeletedOperationClaimCommandResponse>(operationClaimToDelete);
+        DeletedOperationClaimCommandResponse response = _operationClaimMapper.ToDeletedOperationClaimResponse(operationClaimToDelete);
         return response;
     }
 }

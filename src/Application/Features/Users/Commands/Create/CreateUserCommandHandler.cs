@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.Users.Mappers;
 using Domain.Entities;
 using Domain.Repositories.Users;
 using Domain.Services.Users;
@@ -10,16 +10,16 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest
 {
     private readonly UserDomainService _userDomainService;
     private readonly IUserWriteRepository _userWriteRepository;
-    private readonly IMapper _mapper;
+    private readonly UserMapper _userMapper;
 
     public CreateUserCommandHandler(
         UserDomainService userDomainService, 
         IUserWriteRepository userWriteRepository, 
-        IMapper mapper)
+        UserMapper userMapper)
     {
         _userDomainService = userDomainService;
         _userWriteRepository = userWriteRepository;
-        _mapper = mapper;
+        _userMapper = userMapper;
     }
 
     public async Task<CreatedUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
@@ -32,8 +32,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest
         );
         
         await _userWriteRepository.AddAsync(createdUser, cancellationToken);
-        
-        CreatedUserCommandResponse response = _mapper.Map<CreatedUserCommandResponse>(createdUser);
+
+        CreatedUserCommandResponse response = _userMapper.ToCreatedUserCommandResponse(createdUser);
         return response;
     }
 }

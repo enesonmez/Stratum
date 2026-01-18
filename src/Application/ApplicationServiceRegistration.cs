@@ -1,4 +1,7 @@
 using System.Reflection;
+using Application.Features.OperationClaims.Mappers;
+using Application.Features.UserOperationClaims.Mappers;
+using Application.Features.Users.Mappers;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Performance;
@@ -22,7 +25,6 @@ public static class ApplicationServiceRegistration
         IConfiguration configuration
     )
     {
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         services.AddMediatR(mediatRServiceConfiguration =>
@@ -34,6 +36,11 @@ public static class ApplicationServiceRegistration
             mediatRServiceConfiguration.AddOpenBehavior(typeof(RequestValidationBehavior<,>));
             mediatRServiceConfiguration.AddOpenBehavior(typeof(TransactionScopeBehavior<,>));
         });
+        
+        // Mapperly
+        services.AddSingleton<UserMapper>();
+        services.AddSingleton<OperationClaimMapper>();
+        services.AddSingleton<UserOperationClaimMapper>();
         
         // Logging
         var fileLogConfiguration = GetFileLogConfiguration(configuration);

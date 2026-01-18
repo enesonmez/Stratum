@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.Users.Mappers;
 using Core.Application.Responses;
 using Core.Persistence.Abstractions.Paging;
 using Domain.Entities;
@@ -10,12 +10,12 @@ namespace Application.Features.Users.Queries.GetList;
 public class GetListUserQueryHandler : IRequestHandler<GetListUserQueryRequest, GetListResponse<GetListUserListItemDto>>
 {
     private readonly IUserReadRepository _userReadRepository;
-    private readonly IMapper _mapper;
+    private readonly UserMapper _userMapper;
 
-    public GetListUserQueryHandler(IUserReadRepository userReadRepository, IMapper mapper)
+    public GetListUserQueryHandler(IUserReadRepository userReadRepository, UserMapper userMapper)
     {
         _userReadRepository = userReadRepository;
-        _mapper = mapper;
+        _userMapper = userMapper;
     }
 
     public async Task<GetListResponse<GetListUserListItemDto>> Handle(GetListUserQueryRequest request, CancellationToken cancellationToken)
@@ -27,7 +27,7 @@ public class GetListUserQueryHandler : IRequestHandler<GetListUserQueryRequest, 
             cancellationToken: cancellationToken
         );
         
-        GetListResponse<GetListUserListItemDto> response = _mapper.Map<GetListResponse<GetListUserListItemDto>>(users);
+        GetListResponse<GetListUserListItemDto> response = _userMapper.ToGetListUserResponse(users);
         return response;
     }
 }

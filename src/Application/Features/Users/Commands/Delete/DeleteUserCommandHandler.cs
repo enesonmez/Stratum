@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.Users.Mappers;
 using Domain.Entities;
 using Domain.Repositories.Users;
 using Domain.Services.Users;
@@ -10,16 +10,16 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommandRequest
 {
     private readonly UserDomainService _userDomainService;
     private readonly IUserWriteRepository _userWriteRepository;
-    private readonly IMapper _mapper;
+    private readonly UserMapper _userMapper;
 
     public DeleteUserCommandHandler(
         UserDomainService userDomainService,
         IUserWriteRepository userWriteRepository, 
-        IMapper mapper)
+        UserMapper userMapper)
     {
         _userDomainService = userDomainService;
         _userWriteRepository = userWriteRepository;
-        _mapper = mapper;
+        _userMapper = userMapper;
     }
 
     public async Task<DeletedUserCommandResponse> Handle(DeleteUserCommandRequest request,
@@ -29,7 +29,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommandRequest
 
         User deletedUser = await _userWriteRepository.DeleteAsync(userToDelete, cancellationToken: cancellationToken);
         
-        DeletedUserCommandResponse response = _mapper.Map<DeletedUserCommandResponse>(deletedUser);
+        DeletedUserCommandResponse response = _userMapper.ToDeletedUserCommandResponse(deletedUser);
         return response;
     }
 }

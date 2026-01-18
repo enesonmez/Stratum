@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.OperationClaims.Mappers;
 using Domain.Entities;
 using Domain.Repositories.OperationClaims;
 using Domain.Services.OperationClaims;
@@ -11,16 +11,16 @@ public class CreateOperationClaimCommandHandler : IRequestHandler<CreateOperatio
 {
     private readonly OperationClaimDomainService _operationClaimDomainService;
     private readonly IOperationClaimWriteRepository _operationClaimWriteRepository;
-    private readonly IMapper _mapper;
+    private readonly OperationClaimMapper _operationClaimMapper;
 
     public CreateOperationClaimCommandHandler(
         OperationClaimDomainService operationClaimDomainService,
         IOperationClaimWriteRepository operationClaimWriteRepository,
-        IMapper mapper)
+        OperationClaimMapper operationClaimMapper)
     {
         _operationClaimDomainService = operationClaimDomainService;
         _operationClaimWriteRepository = operationClaimWriteRepository;
-        _mapper = mapper;
+        _operationClaimMapper = operationClaimMapper;
     }
 
     public async Task<CreatedOperationClaimCommandResponse> Handle(CreateOperationClaimCommandRequest request,
@@ -30,7 +30,7 @@ public class CreateOperationClaimCommandHandler : IRequestHandler<CreateOperatio
 
         await _operationClaimWriteRepository.AddAsync(operationClaim, cancellationToken);
 
-        CreatedOperationClaimCommandResponse response = _mapper.Map<CreatedOperationClaimCommandResponse>(operationClaim);
+        CreatedOperationClaimCommandResponse response = _operationClaimMapper.ToCreatedOperationClaimResponse(operationClaim);
         return response;
     }
 }

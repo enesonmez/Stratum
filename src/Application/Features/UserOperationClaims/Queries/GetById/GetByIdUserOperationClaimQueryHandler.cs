@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Features.UserOperationClaims.Mappers;
 using Domain.Entities;
 using Domain.Services.UserOperationClaims;
 using MediatR;
@@ -9,11 +9,11 @@ public class GetByIdUserOperationClaimQueryHandler : IRequestHandler<GetByIdUser
     GetByIdUserOperationClaimQueryResponse>
 {
     private readonly UserOperationClaimDomainService _userOperationClaimDomainService;
-    private readonly IMapper _mapper;
+    private readonly UserOperationClaimMapper _mapper;
 
     public GetByIdUserOperationClaimQueryHandler(
         UserOperationClaimDomainService userOperationClaimDomainService,
-        IMapper mapper)
+        UserOperationClaimMapper mapper)
     {
         _userOperationClaimDomainService = userOperationClaimDomainService;
         _mapper = mapper;
@@ -25,7 +25,7 @@ public class GetByIdUserOperationClaimQueryHandler : IRequestHandler<GetByIdUser
         UserOperationClaim userOperationClaim = await _userOperationClaimDomainService.GetUserOperationClaimByIdAsync(request.Id);
 
         GetByIdUserOperationClaimQueryResponse response =
-            _mapper.Map<GetByIdUserOperationClaimQueryResponse>(userOperationClaim);
+            _mapper.ToGetByIdUserOperationClaimResponse(userOperationClaim);
         return response;
     }
 }
