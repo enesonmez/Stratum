@@ -1,7 +1,7 @@
-using Application.Features.UserOperationClaims.Rules;
-using Application.Services.UserOperationClaimService;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Repositories.UserOperationClaims;
+using Domain.Services.UserOperationClaims;
 using MediatR;
 
 namespace Application.Features.UserOperationClaims.Commands.Delete;
@@ -9,31 +9,28 @@ namespace Application.Features.UserOperationClaims.Commands.Delete;
 public class DeleteUserOperationClaimCommandHandler : IRequestHandler<DeleteUserOperationClaimCommandRequest,
     DeletedUserOperationClaimCommandResponse>
 {
-    private readonly IUserOperationClaimService _userOperationClaimService;
+    private readonly UserOperationClaimDomainService _userOperationClaimDomainService;
+    private readonly IUserOperationClaimWriteRepository _userOperationClaimWriteRepository;
     private readonly IMapper _mapper;
-    private readonly UserOperationClaimBusinessRules _userOperationClaimBusinessRules;
 
-    public DeleteUserOperationClaimCommandHandler(IUserOperationClaimService userOperationClaimService, IMapper mapper,
-        UserOperationClaimBusinessRules userOperationClaimBusinessRules)
+    public DeleteUserOperationClaimCommandHandler(
+        UserOperationClaimDomainService userOperationClaimDomainService,
+        IUserOperationClaimWriteRepository userOperationClaimWriteRepository,
+        IMapper mapper)
     {
-        _userOperationClaimService = userOperationClaimService;
+        _userOperationClaimDomainService = userOperationClaimDomainService;
+        _userOperationClaimWriteRepository = userOperationClaimWriteRepository;
         _mapper = mapper;
-        _userOperationClaimBusinessRules = userOperationClaimBusinessRules;
     }
 
     public async Task<DeletedUserOperationClaimCommandResponse> Handle(DeleteUserOperationClaimCommandRequest request,
         CancellationToken cancellationToken)
     {
-        UserOperationClaim? userOperationClaim = await _userOperationClaimService.GetByIdAsync(
-            request.Id,
-            enableTracking: false,
-            cancellationToken: cancellationToken
-        );
-        await _userOperationClaimBusinessRules.UserOperationClaimShouldExistWhenSelected(userOperationClaim);
-        
-        await _userOperationClaimService.DeleteAsync(userOperationClaim!);
-        DeletedUserOperationClaimCommandResponse response =
-            _mapper.Map<DeletedUserOperationClaimCommandResponse>(userOperationClaim);
+        UserOperationClaim userOperationClaim = await _userOperationClaimDomainService.DeleteUserOperationClaimAsync(request.Id);
+
+        await _userOperationClaimWriteRepository.DeleteAsync(userOperationClaim, cancellationToken: cancellationToken);
+
+        DeletedUserOperationClaimCommandResponse response = _mapper.Map<DeletedUserOperationClaimCommandResponse>(userOperationClaim);
         return response;
     }
 }

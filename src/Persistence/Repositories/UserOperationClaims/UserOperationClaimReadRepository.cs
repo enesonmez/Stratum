@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
-using Application.Dtos;
-using Application.Repositories.UserOperationClaims;
+using Core.Persistence.Abstractions.Paging;
 using Core.Persistence.Paging;
 using Core.Persistence.Repositories;
 using Domain.Entities;
+using Domain.Repositories.UserOperationClaims;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 
@@ -16,9 +16,10 @@ public class UserOperationClaimReadRepository : EfReadRepositoryBase<UserOperati
     {
     }
 
-    public async Task<IPaginate<UserOperationClaimListItemDto>> GetListUserOperationClaimDtoAsync(
+    public async Task<IPaginate<UserOperationClaim>> GetListWithDetailsAsync(
         Expression<Func<UserOperationClaim, bool>>? predicate = null,
-        Func<IQueryable<UserOperationClaim>, IOrderedQueryable<UserOperationClaim>>? orderBy = null, int index = 0,
+        Func<IQueryable<UserOperationClaim>, IOrderedQueryable<UserOperationClaim>>? orderBy = null, 
+        int index = 0,
         int size = 10,
         bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
@@ -35,14 +36,6 @@ public class UserOperationClaimReadRepository : EfReadRepositoryBase<UserOperati
         if (orderBy != null)
             orderBy(queryable);
         
-        var dtoList = queryable.Select(uoc => new UserOperationClaimListItemDto
-        {
-            Id = uoc.Id,
-            UserId = uoc.UserId,
-            Email = uoc.User.Email,
-            OperationClaimId = uoc.OperationClaimId,
-            OperationClaimName = uoc.OperationClaim.Name
-        });
-        return await dtoList.ToPaginateAsync(index, size, from: 0, cancellationToken);
+        return await queryable.ToPaginateAsync(index, size, from: 0, cancellationToken);
     }
 }

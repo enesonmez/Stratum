@@ -1,6 +1,6 @@
-using Application.Repositories.OperationClaims;
 using Core.Persistence.Repositories;
 using Domain.Entities;
+using Domain.Repositories.OperationClaims;
 using Persistence.Contexts;
 
 namespace Persistence.Repositories.OperationClaims;

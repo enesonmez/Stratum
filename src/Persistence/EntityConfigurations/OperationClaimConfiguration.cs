@@ -30,23 +30,23 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
 
     public static int AdminId => 1;
 
-    private IEnumerable<OperationClaim> Seeds
+    private IEnumerable<object> Seeds
     {
         get
         {
-            yield return new OperationClaim { Id = AdminId, Name = GeneralOperationClaims.Admin };
+            yield return new { Id = AdminId, Name = GeneralOperationClaims.Admin, CreatedDate = DateTime.UtcNow };
 
-            IEnumerable<OperationClaim> featureOperationClaims = GetFeatureOperationClaims(AdminId);
+            IEnumerable<object> featureOperationClaims = GetFeatureOperationClaims(AdminId);
             foreach (var claim in featureOperationClaims)
                 yield return claim;
         }
     }
 
 #pragma warning disable S1854 // Unused assignments should be removed
-    private IEnumerable<OperationClaim> GetFeatureOperationClaims(int initialId)
+    private IEnumerable<object> GetFeatureOperationClaims(int initialId)
     {
         var lastId = initialId;
-        List<OperationClaim> featureOperationClaims = [];
+        List<object> featureOperationClaims = [];
 
         // #region Auth
         // featureOperationClaims.AddRange(
@@ -63,12 +63,12 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
 
         featureOperationClaims.AddRange(
             [
-                new OperationClaim { Id = ++lastId, Name = OperationClaimsOperationClaims.Admin },
-                new OperationClaim { Id = ++lastId, Name = OperationClaimsOperationClaims.Read },
-                new OperationClaim { Id = ++lastId, Name = OperationClaimsOperationClaims.Write },
-                new OperationClaim { Id = ++lastId, Name = OperationClaimsOperationClaims.Create },
-                new OperationClaim { Id = ++lastId, Name = OperationClaimsOperationClaims.Update },
-                new OperationClaim { Id = ++lastId, Name = OperationClaimsOperationClaims.Delete },
+                new { Id = ++lastId, Name = OperationClaimsOperationClaims.Admin, CreatedDate = DateTime.UtcNow },
+                new { Id = ++lastId, Name = OperationClaimsOperationClaims.Read, CreatedDate = DateTime.UtcNow },
+                new { Id = ++lastId, Name = OperationClaimsOperationClaims.Write, CreatedDate = DateTime.UtcNow },
+                new { Id = ++lastId, Name = OperationClaimsOperationClaims.Create, CreatedDate = DateTime.UtcNow },
+                new { Id = ++lastId, Name = OperationClaimsOperationClaims.Update, CreatedDate = DateTime.UtcNow },
+                new { Id = ++lastId, Name = OperationClaimsOperationClaims.Delete, CreatedDate = DateTime.UtcNow },
             ]
         );
 
@@ -91,12 +91,12 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
 
         featureOperationClaims.AddRange(
             [
-                new OperationClaim { Id = ++lastId, Name = UsersOperationClaims.Admin },
-                new OperationClaim { Id = ++lastId, Name = UsersOperationClaims.Read },
-                new OperationClaim { Id = ++lastId, Name = UsersOperationClaims.Write },
-                new OperationClaim { Id = ++lastId, Name = UsersOperationClaims.Create },
-                new OperationClaim { Id = ++lastId, Name = UsersOperationClaims.Update },
-                new OperationClaim { Id = ++lastId, Name = UsersOperationClaims.Delete },
+                new { Id = ++lastId, Name = UsersOperationClaims.Admin, CreatedDate = DateTime.UtcNow },
+                new { Id = ++lastId, Name = UsersOperationClaims.Read, CreatedDate = DateTime.UtcNow },
+                new { Id = ++lastId, Name = UsersOperationClaims.Write, CreatedDate = DateTime.UtcNow },
+                new { Id = ++lastId, Name = UsersOperationClaims.Create, CreatedDate = DateTime.UtcNow },
+                new { Id = ++lastId, Name = UsersOperationClaims.Update, CreatedDate = DateTime.UtcNow },
+                new { Id = ++lastId, Name = UsersOperationClaims.Delete, CreatedDate = DateTime.UtcNow },
             ]
         );
 

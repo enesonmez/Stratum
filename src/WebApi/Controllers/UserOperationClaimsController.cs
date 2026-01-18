@@ -1,6 +1,5 @@
 using Application.Features.UserOperationClaims.Commands.Create;
 using Application.Features.UserOperationClaims.Commands.Delete;
-using Application.Features.UserOperationClaims.Commands.Update;
 using Application.Features.UserOperationClaims.Queries.GetById;
 using Application.Features.UserOperationClaims.Queries.GetList;
 using Core.Application.Requests;
@@ -37,15 +36,6 @@ namespace WebApi.Controllers
             CreatedUserOperationClaimCommandResponse result =
                 await Mediator.Send(createUserOperationClaimCommandRequest);
             return Created(uri: "", value: result);
-        }
-
-        [HttpPut]
-        public async Task<ActionResult<UpdatedUserOperationClaimCommandResponse>> Put(
-            [FromBody] UpdateUserOperationClaimCommandRequest updateUserOperationClaimCommandRequest)
-        {
-            UpdatedUserOperationClaimCommandResponse result =
-                await Mediator.Send(updateUserOperationClaimCommandRequest);
-            return Ok(result);
         }
 
         [HttpDelete]

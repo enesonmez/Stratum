@@ -6,7 +6,7 @@ public class GetListUserOperationClaimListItemDto : IDto
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
-    public string Email { get; set; } = string.Empty;
+    public string UserEmail { get; set; } = string.Empty;
     public int OperationClaimId { get; set; }
     public string OperationClaimName { get; set; } = string.Empty;
 }

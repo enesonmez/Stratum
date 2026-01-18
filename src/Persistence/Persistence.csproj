@@ -26,6 +26,9 @@
       <Reference Include="Core.Persistence">
         <HintPath>..\..\..\Stratum.Core\src\Core.Security\bin\Debug\net9.0\Core.Persistence.dll</HintPath>
       </Reference>
+      <Reference Include="Core.Persistence.Abstractions">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Persistence.Abstractions\bin\Debug\net9.0\Core.Persistence.Abstractions.dll</HintPath>
+      </Reference>
       <Reference Include="Core.Persistence.DI">
         <HintPath>..\..\..\Stratum.Core\src\Core.Persistence.DI\bin\Debug\net9.0\Core.Persistence.DI.dll</HintPath>
       </Reference>

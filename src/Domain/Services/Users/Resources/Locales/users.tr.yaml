@@ -1,0 +1,4 @@
+UserNotFound: "Kullanıcı bulunmuyor."
+UserMailAlreadyExists: "Kullanıcı e-postası zaten mevcut."
+PasswordDontMatch: "Parola eşleşmiyor."
+PasswordTooWeak: "Şifreniz çok zayıf. En az 6 karakter olmalı."

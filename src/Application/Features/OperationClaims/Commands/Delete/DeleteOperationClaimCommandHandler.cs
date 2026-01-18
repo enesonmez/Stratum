@@ -1,7 +1,7 @@
-using Application.Features.OperationClaims.Rules;
-using Application.Services.OperationClaimService;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Repositories.OperationClaims;
+using Domain.Services.OperationClaims;
 using MediatR;
 
 namespace Application.Features.OperationClaims.Commands.Delete;
@@ -10,32 +10,28 @@ public class
     DeleteOperationClaimCommandHandler : IRequestHandler<DeleteOperationClaimCommandRequest,
     DeletedOperationClaimCommandResponse>
 {
-    private readonly IOperationClaimService _operationClaimService;
+    private readonly OperationClaimDomainService _operationClaimDomainService;
+    private readonly IOperationClaimWriteRepository _operationClaimWriteRepository;
     private readonly IMapper _mapper;
-    private readonly OperationClaimBusinessRules _operationClaimBusinessRules;
 
-    public DeleteOperationClaimCommandHandler(IOperationClaimService operationClaimService, IMapper mapper,
-        OperationClaimBusinessRules operationClaimBusinessRules)
+    public DeleteOperationClaimCommandHandler(
+        OperationClaimDomainService operationClaimDomainService,
+        IOperationClaimWriteRepository operationClaimWriteRepository,
+        IMapper mapper)
     {
-        _operationClaimService = operationClaimService;
+        _operationClaimDomainService = operationClaimDomainService;
+        _operationClaimWriteRepository = operationClaimWriteRepository;
         _mapper = mapper;
-        _operationClaimBusinessRules = operationClaimBusinessRules;
     }
 
     public async Task<DeletedOperationClaimCommandResponse> Handle(DeleteOperationClaimCommandRequest request,
         CancellationToken cancellationToken)
     {
-        OperationClaim? operationClaim = await _operationClaimService.GetByIdAsync(
-            request.Id,
-            enableTracking: false,
-            cancellationToken: cancellationToken
-        );
-        await _operationClaimBusinessRules.OperationClaimShouldExistWhenSelected(operationClaim);
+        OperationClaim operationClaimToDelete = await _operationClaimDomainService.DeleteOperationClaimAsync(request.Id);
 
-        OperationClaim deletedOperationClaim = await _operationClaimService.DeleteAsync(operationClaim!);
+        await _operationClaimWriteRepository.DeleteAsync(operationClaimToDelete, cancellationToken: cancellationToken);
 
-        DeletedOperationClaimCommandResponse response =
-            _mapper.Map<DeletedOperationClaimCommandResponse>(deletedOperationClaim);
+        DeletedOperationClaimCommandResponse response = _mapper.Map<DeletedOperationClaimCommandResponse>(operationClaimToDelete);
         return response;
     }
 }

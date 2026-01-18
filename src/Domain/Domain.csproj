@@ -10,12 +10,31 @@
       <Reference Include="Core.Application">
         <HintPath>..\..\..\Stratum.Core\src\Core.Application\bin\Debug\net9.0\Core.Application.dll</HintPath>
       </Reference>
-      <Reference Include="Core.Persistence">
-        <HintPath>..\..\..\Stratum.Core\src\Core.Security\bin\Debug\net9.0\Core.Persistence.dll</HintPath>
+      <Reference Include="Core.CrossCuttingConcerns.Exception">
+        <HintPath>..\..\..\Stratum.Core\src\Core.CrossCuttingConcerns.Exception\bin\Debug\net9.0\Core.CrossCuttingConcerns.Exception.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Domain">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Domain\bin\Debug\net9.0\Core.Domain.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Localization">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Localization\bin\Debug\net9.0\Core.Localization.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Persistence.Abstractions">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Persistence.Abstractions\bin\Debug\net9.0\Core.Persistence.Abstractions.dll</HintPath>
       </Reference>
       <Reference Include="Core.Security">
         <HintPath>..\..\..\Stratum.Core\src\Core.Security\bin\Debug\net9.0\Core.Security.dll</HintPath>
       </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Services\**\Resources\Locales\*.*.yaml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1" />
     </ItemGroup>
 
 </Project>

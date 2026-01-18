@@ -1,7 +1,6 @@
-using Application.Features.UserOperationClaims.Rules;
-using Application.Services.UserOperationClaimService;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Services.UserOperationClaims;
 using MediatR;
 
 namespace Application.Features.UserOperationClaims.Queries.GetById;
@@ -9,27 +8,21 @@ namespace Application.Features.UserOperationClaims.Queries.GetById;
 public class GetByIdUserOperationClaimQueryHandler : IRequestHandler<GetByIdUserOperationClaimQueryRequest,
     GetByIdUserOperationClaimQueryResponse>
 {
-    private readonly IUserOperationClaimService _userOperationClaimService;
+    private readonly UserOperationClaimDomainService _userOperationClaimDomainService;
     private readonly IMapper _mapper;
-    private readonly UserOperationClaimBusinessRules _userOperationClaimBusinessRules;
 
-    public GetByIdUserOperationClaimQueryHandler(IUserOperationClaimService userOperationClaimService, IMapper mapper,
-        UserOperationClaimBusinessRules userOperationClaimBusinessRules)
+    public GetByIdUserOperationClaimQueryHandler(
+        UserOperationClaimDomainService userOperationClaimDomainService,
+        IMapper mapper)
     {
-        _userOperationClaimService = userOperationClaimService;
+        _userOperationClaimDomainService = userOperationClaimDomainService;
         _mapper = mapper;
-        _userOperationClaimBusinessRules = userOperationClaimBusinessRules;
     }
 
     public async Task<GetByIdUserOperationClaimQueryResponse> Handle(GetByIdUserOperationClaimQueryRequest request,
         CancellationToken cancellationToken)
     {
-        UserOperationClaim? userOperationClaim = await _userOperationClaimService.GetByIdAsync(
-            request.Id,
-            enableTracking: false,
-            cancellationToken: cancellationToken
-        );
-        await _userOperationClaimBusinessRules.UserOperationClaimShouldExistWhenSelected(userOperationClaim);
+        UserOperationClaim userOperationClaim = await _userOperationClaimDomainService.GetUserOperationClaimByIdAsync(request.Id);
 
         GetByIdUserOperationClaimQueryResponse response =
             _mapper.Map<GetByIdUserOperationClaimQueryResponse>(userOperationClaim);

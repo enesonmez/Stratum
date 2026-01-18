@@ -1,35 +1,35 @@
-using Application.Features.Users.Rules;
-using Application.Services.UserService;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Repositories.Users;
+using Domain.Services.Users;
 using MediatR;
 
 namespace Application.Features.Users.Commands.Delete;
 
 public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommandRequest, DeletedUserCommandResponse>
 {
-    private readonly IUserService _userService;
+    private readonly UserDomainService _userDomainService;
+    private readonly IUserWriteRepository _userWriteRepository;
     private readonly IMapper _mapper;
-    private readonly UserBusinessRules _userBusinessRules;
 
-    public DeleteUserCommandHandler(IUserService userService, IMapper mapper, UserBusinessRules userBusinessRules)
+    public DeleteUserCommandHandler(
+        UserDomainService userDomainService,
+        IUserWriteRepository userWriteRepository, 
+        IMapper mapper)
     {
-        _userService = userService;
+        _userDomainService = userDomainService;
+        _userWriteRepository = userWriteRepository;
         _mapper = mapper;
-        _userBusinessRules = userBusinessRules;
     }
 
     public async Task<DeletedUserCommandResponse> Handle(DeleteUserCommandRequest request,
         CancellationToken cancellationToken)
     {
-        User? user = await _userService.GetByIdAsync(
-                request.Id, 
-                enableTracking: false, 
-                cancellationToken: cancellationToken
-        );
-        await _userBusinessRules.UserShouldBeExistsWhenSelected(user);
+        User userToDelete = await _userDomainService.DeleteUserAsync(request.Id);
 
-        User deletedUser = await _userService.DeleteAsync(user!);
-        return _mapper.Map<DeletedUserCommandResponse>(deletedUser);
+        User deletedUser = await _userWriteRepository.DeleteAsync(userToDelete, cancellationToken: cancellationToken);
+        
+        DeletedUserCommandResponse response = _mapper.Map<DeletedUserCommandResponse>(deletedUser);
+        return response;
     }
 }

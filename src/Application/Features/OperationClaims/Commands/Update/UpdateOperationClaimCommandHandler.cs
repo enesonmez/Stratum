@@ -1,7 +1,7 @@
-using Application.Features.OperationClaims.Rules;
-using Application.Services.OperationClaimService;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Repositories.OperationClaims;
+using Domain.Services.OperationClaims;
 using MediatR;
 
 namespace Application.Features.OperationClaims.Commands.Update;
@@ -10,35 +10,32 @@ public class
     UpdateOperationClaimCommandHandler : IRequestHandler<UpdateOperationClaimCommandRequest,
     UpdatedOperationClaimCommandResponse>
 {
-    private readonly IOperationClaimService _operationClaimService;
+    private readonly OperationClaimDomainService _operationClaimDomainService;
+    private readonly IOperationClaimWriteRepository _operationClaimWriteRepository;
     private readonly IMapper _mapper;
-    private readonly OperationClaimBusinessRules _operationClaimBusinessRules;
 
-    public UpdateOperationClaimCommandHandler(IMapper mapper, IOperationClaimService operationClaimService,
-        OperationClaimBusinessRules operationClaimBusinessRules)
+    public UpdateOperationClaimCommandHandler(
+        OperationClaimDomainService operationClaimDomainService,
+        IOperationClaimWriteRepository operationClaimWriteRepository,
+        IMapper mapper)
     {
+        _operationClaimDomainService = operationClaimDomainService;
+        _operationClaimWriteRepository = operationClaimWriteRepository;
         _mapper = mapper;
-        _operationClaimService = operationClaimService;
-        _operationClaimBusinessRules = operationClaimBusinessRules;
     }
 
     public async Task<UpdatedOperationClaimCommandResponse> Handle(UpdateOperationClaimCommandRequest request,
         CancellationToken cancellationToken)
     {
-        OperationClaim? operationClaim = await _operationClaimService.GetByIdAsync(
-            request.Id,
-            enableTracking: false,
-            cancellationToken: cancellationToken
+        OperationClaim updatedOperationClaim = await _operationClaimDomainService.UpdateOperationClaimAsync(
+            request.Id, 
+            request.Name
         );
-        await _operationClaimBusinessRules.OperationClaimShouldExistWhenSelected(operationClaim);
-        await _operationClaimBusinessRules.OperationClaimNameShouldNotExistWhenUpdating(operationClaim!.Id,
-            request.Name);
 
-        OperationClaim mappedOperationClaim = _mapper.Map(request, operationClaim);
-        OperationClaim updatedOperationClaim = await _operationClaimService.UpdateAsync(mappedOperationClaim);
+        await _operationClaimWriteRepository.UpdateAsync(updatedOperationClaim, cancellationToken);
 
-        UpdatedOperationClaimCommandResponse response =
-            _mapper.Map<UpdatedOperationClaimCommandResponse>(updatedOperationClaim);
+        // 3. Mapping & Response
+        UpdatedOperationClaimCommandResponse response = _mapper.Map<UpdatedOperationClaimCommandResponse>(updatedOperationClaim);
         return response;
     }
 }

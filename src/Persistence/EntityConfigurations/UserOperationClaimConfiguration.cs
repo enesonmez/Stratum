@@ -28,15 +28,16 @@ public class UserOperationClaimConfiguration : IEntityTypeConfiguration<UserOper
         builder.HasBaseType((string)null!);
     }
     
-    private IEnumerable<UserOperationClaim> Seeds
+    private IEnumerable<object> Seeds
     {
         get
         {
-            yield return new()
+            yield return new
             {
                 Id = Guid.NewGuid(),
                 UserId = UserConfiguration.AdminId,
-                OperationClaimId = OperationClaimConfiguration.AdminId
+                OperationClaimId = OperationClaimConfiguration.AdminId,
+                CreatedDate = DateTime.UtcNow,
             };
         }
     }

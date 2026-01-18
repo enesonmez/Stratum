@@ -1,0 +1,4 @@
+UserNotFound: "User don't exists."
+UserMailAlreadyExists: "User mail already exists."
+PasswordDontMatch: "Password don't match."
+PasswordTooWeak: "Your password is too weak. It must be at least 6 characters long."

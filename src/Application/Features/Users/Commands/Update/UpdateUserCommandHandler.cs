@@ -1,39 +1,39 @@
-using Application.Features.Users.Rules;
-using Application.Services.UserService;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Repositories.Users;
+using Domain.Services.Users;
 using MediatR;
 
 namespace Application.Features.Users.Commands.Update;
 
 public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommandRequest, UpdatedUserCommandResponse>
 {
-    private readonly IUserService _userService;
-    private readonly UserBusinessRules _userBusinessRules;
+    private readonly UserDomainService _userDomainService;
+    private readonly IUserWriteRepository _userWriteRepository;
     private readonly IMapper _mapper;
 
-    public UpdateUserCommandHandler(IUserService userService, IMapper mapper, UserBusinessRules userBusinessRules)
+    public UpdateUserCommandHandler(
+        UserDomainService userDomainService, 
+        IUserWriteRepository userWriteRepository, 
+        IMapper mapper)
     {
-        _userService = userService;
-        _userBusinessRules = userBusinessRules;
+        _userDomainService = userDomainService;
+        _userWriteRepository = userWriteRepository;
         _mapper = mapper;
     }
 
     public async Task<UpdatedUserCommandResponse> Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
     {
-        User? user = await _userService.GetByIdAsync(
+        User updatedUser = await _userDomainService.UpdateUserAsync(
             request.Id,
-            enableTracking: false,
-            cancellationToken: cancellationToken
+            request.FirstName,
+            request.LastName,
+            request.Email
         );
 
-        await _userBusinessRules.UserShouldBeExistsWhenSelected(user);
-        await _userBusinessRules.UserEmailShouldNotExistsWhenUpdate(user!.Id, request.Email);
-        
-        user = _mapper.Map(request, user);
-        
-        User updatedUser = await _userService.UpdateAsync(user);
-        
-        return _mapper.Map<UpdatedUserCommandResponse>(updatedUser);
+        await _userWriteRepository.UpdateAsync(updatedUser, cancellationToken);
+
+        UpdatedUserCommandResponse response = _mapper.Map<UpdatedUserCommandResponse>(updatedUser);
+        return response;
     }
 }

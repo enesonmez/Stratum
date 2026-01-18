@@ -34,7 +34,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     }
 
     public static Guid AdminId { get; } = Guid.NewGuid();
-    private IEnumerable<User> Seeds
+    private IEnumerable<object> Seeds
     {
         get
         {
@@ -43,15 +43,17 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 passwordHash: out byte[] passwordHash,
                 passwordSalt: out byte[] passwordSalt
             );
-            User adminUser =
-                new()
+            var adminUser =
+                new
                 {
                     Id = AdminId,
                     Email = "stratum@gmail.com",
                     FirstName = "Stratum",
                     LastName = "Stratum",
                     PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt
+                    PasswordSalt = passwordSalt,
+                    AuthenticatorType = Core.Security.Enums.AuthenticatorType.None,
+                    CreatedDate = DateTime.UtcNow
                 };
             yield return adminUser;
         }

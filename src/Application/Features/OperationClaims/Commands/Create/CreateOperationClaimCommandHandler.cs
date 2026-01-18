@@ -1,7 +1,7 @@
-using Application.Features.OperationClaims.Rules;
-using Application.Services.OperationClaimService;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Repositories.OperationClaims;
+using Domain.Services.OperationClaims;
 using MediatR;
 
 namespace Application.Features.OperationClaims.Commands.Create;
@@ -9,28 +9,28 @@ namespace Application.Features.OperationClaims.Commands.Create;
 public class CreateOperationClaimCommandHandler : IRequestHandler<CreateOperationClaimCommandRequest,
     CreatedOperationClaimCommandResponse>
 {
-    private readonly IOperationClaimService _operationClaimService;
+    private readonly OperationClaimDomainService _operationClaimDomainService;
+    private readonly IOperationClaimWriteRepository _operationClaimWriteRepository;
     private readonly IMapper _mapper;
-    private readonly OperationClaimBusinessRules _operationClaimBusinessRules;
 
-    public CreateOperationClaimCommandHandler(IOperationClaimService operationClaimService, IMapper mapper,
-        OperationClaimBusinessRules operationClaimBusinessRules)
+    public CreateOperationClaimCommandHandler(
+        OperationClaimDomainService operationClaimDomainService,
+        IOperationClaimWriteRepository operationClaimWriteRepository,
+        IMapper mapper)
     {
-        _operationClaimService = operationClaimService;
+        _operationClaimDomainService = operationClaimDomainService;
+        _operationClaimWriteRepository = operationClaimWriteRepository;
         _mapper = mapper;
-        _operationClaimBusinessRules = operationClaimBusinessRules;
     }
 
     public async Task<CreatedOperationClaimCommandResponse> Handle(CreateOperationClaimCommandRequest request,
         CancellationToken cancellationToken)
     {
-        await _operationClaimBusinessRules.OperationClaimNameShouldNotExistWhenCreating(request.Name);
-        
-        OperationClaim operationClaim = _mapper.Map<OperationClaim>(request);
-        OperationClaim createdOperationClaim = await _operationClaimService.AddAsync(operationClaim);
+        OperationClaim operationClaim = await _operationClaimDomainService.CreateOperationClaimAsync(request.Name);
 
-        CreatedOperationClaimCommandResponse response =
-            _mapper.Map<CreatedOperationClaimCommandResponse>(createdOperationClaim);
+        await _operationClaimWriteRepository.AddAsync(operationClaim, cancellationToken);
+
+        CreatedOperationClaimCommandResponse response = _mapper.Map<CreatedOperationClaimCommandResponse>(operationClaim);
         return response;
     }
 }

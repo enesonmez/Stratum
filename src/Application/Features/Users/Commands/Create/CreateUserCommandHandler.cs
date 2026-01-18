@@ -1,30 +1,39 @@
-using Application.Features.Users.Rules;
-using Application.Services.UserService;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Repositories.Users;
+using Domain.Services.Users;
 using MediatR;
 
 namespace Application.Features.Users.Commands.Create;
 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreatedUserCommandResponse>
 {
-    private readonly IUserService _userService;
+    private readonly UserDomainService _userDomainService;
+    private readonly IUserWriteRepository _userWriteRepository;
     private readonly IMapper _mapper;
-    private readonly UserBusinessRules _userBusinessRules;
 
-    public CreateUserCommandHandler(IUserService userService, IMapper mapper, UserBusinessRules userBusinessRules)
+    public CreateUserCommandHandler(
+        UserDomainService userDomainService, 
+        IUserWriteRepository userWriteRepository, 
+        IMapper mapper)
     {
-        _userService = userService;
+        _userDomainService = userDomainService;
+        _userWriteRepository = userWriteRepository;
         _mapper = mapper;
-        _userBusinessRules = userBusinessRules;
     }
 
     public async Task<CreatedUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
     {
-        await _userBusinessRules.UserEmailShouldNotExistsWhenInsert(request.Email);
-        User user = _mapper.Map<User>(request);
-        User createdUser = await _userService.CreateAsync(user, request.Password);
+        User createdUser = await _userDomainService.CreateUserAsync(
+            request.FirstName,
+            request.LastName,
+            request.Email,
+            request.Password
+        );
         
-        return _mapper.Map<CreatedUserCommandResponse>(createdUser);
+        await _userWriteRepository.AddAsync(createdUser, cancellationToken);
+        
+        CreatedUserCommandResponse response = _mapper.Map<CreatedUserCommandResponse>(createdUser);
+        return response;
     }
 }

@@ -1,9 +1,9 @@
+using Application.Features.Users.Constants;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Performance;
 using Core.Application.Pipelines.Transaction;
 using MediatR;
-using Application.Features.Users.Constants;
 
 namespace Application.Features.Users.Commands.Create;
 
@@ -32,5 +32,5 @@ public class CreateUserCommandRequest : IRequest<CreatedUserCommandResponse>, IL
     }
 
     int IPerformanceRequest.Interval => 0;
-    public string[] Roles => [UsersOperationClaims.Admin, UsersOperationClaims.Write, UsersOperationClaims.Create];
+    string[] ISecuredRequest.Roles => [UsersOperationClaims.Admin, UsersOperationClaims.Write, UsersOperationClaims.Create];
 }

@@ -6,6 +6,8 @@ using Core.Persistence.WebApi;
 using Core.Security.Encryption;
 using Core.Security.Jwt;
 using Core.Security.Swagger.Extensions;
+using Domain;
+using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,7 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Add services to the container.
+builder.Services.AddDomainServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();

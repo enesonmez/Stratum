@@ -1,10 +1,11 @@
-using Application.Repositories.OperationClaims;
-using Application.Repositories.RefreshTokens;
-using Application.Repositories.UserOperationClaims;
-using Application.Repositories.Users;
 using Core.Localization.DB.Repositories.Resources;
+using Core.Persistence.Abstractions.UnitOfWork;
 using Core.Persistence.DI;
 using Core.Persistence.UnitOfWork;
+using Domain.Repositories.OperationClaims;
+using Domain.Repositories.RefreshTokens;
+using Domain.Repositories.UserOperationClaims;
+using Domain.Repositories.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

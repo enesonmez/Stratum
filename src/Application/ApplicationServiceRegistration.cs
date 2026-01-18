@@ -1,17 +1,12 @@
 using System.Reflection;
-using Application.Services.OperationClaimService;
-using Application.Services.UserOperationClaimService;
-using Application.Services.UserService;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Performance;
 using Core.Application.Pipelines.Transaction;
 using Core.Application.Pipelines.Validation;
-using Core.Application.Rules;
 using Core.CrossCuttingConcerns.Logging.Abstraction;
 using Core.CrossCuttingConcerns.Logging.Configurations;
 using Core.CrossCuttingConcerns.Logging.SeriLog;
-using Core.Localization.DI;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,22 +35,12 @@ public static class ApplicationServiceRegistration
             mediatRServiceConfiguration.AddOpenBehavior(typeof(TransactionScopeBehavior<,>));
         });
         
-        // Business Rules
-        services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
-        
         // Logging
         var fileLogConfiguration = GetFileLogConfiguration(configuration);
         services.AddSingleton<ISeriLogSinkProvider>(new SerilogFileLogSinkProvider(fileLogConfiguration));
         services.AddSingleton<ILogger, SeriLogLogger>();
         
         // Services
-        services.AddScoped<IUserService, UserManager>();
-        services.AddScoped<IOperationClaimService, OperationClaimManager>();
-        services.AddScoped<IUserOperationClaimService, UserOperationClaimManager>();
-        
-        // Localization
-        services.AddFileLocalization(Assembly.GetExecutingAssembly());
-        // services.AddDbLocalization();
         
         // Security
         var tokenOptions =  GetTokenOptions(configuration);
@@ -64,21 +49,6 @@ public static class ApplicationServiceRegistration
         return services;
     }
 
-    private static IServiceCollection AddSubClassesOfType(
-        this IServiceCollection services,
-        Assembly assembly,
-        Type type,
-        Func<IServiceCollection, Type, IServiceCollection>? addWithLifeCycle = null
-    )
-    {
-        var types = assembly.GetTypes().Where(t => t.IsSubclassOf(type) && type != t).ToList();
-        foreach (Type? item in types)
-            if (addWithLifeCycle == null)
-                services.AddScoped(item);
-            else
-                addWithLifeCycle(services, type);
-        return services;
-    }
 
     private static FileLogConfiguration GetFileLogConfiguration(IConfiguration configuration)
     {

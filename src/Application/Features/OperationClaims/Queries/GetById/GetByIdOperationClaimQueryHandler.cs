@@ -1,7 +1,6 @@
-using Application.Features.OperationClaims.Rules;
-using Application.Services.OperationClaimService;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Services.OperationClaims;
 using MediatR;
 
 namespace Application.Features.OperationClaims.Queries.GetById;
@@ -10,28 +9,24 @@ public class
     GetByIdOperationClaimQueryHandler : IRequestHandler<GetByIdOperationClaimQueryRequest,
     GetByIdOperationClaimQueryResponse>
 {
-    private readonly IOperationClaimService _operationClaimService;
+    private readonly OperationClaimDomainService _operationClaimDomainService;
     private readonly IMapper _mapper;
-    private readonly OperationClaimBusinessRules _operationClaimBusinessRules;
 
-    public GetByIdOperationClaimQueryHandler(IOperationClaimService operationClaimService, IMapper mapper,
-        OperationClaimBusinessRules operationClaimBusinessRules)
+    public GetByIdOperationClaimQueryHandler(
+        OperationClaimDomainService operationClaimDomainService, 
+        IMapper mapper)
     {
-        _operationClaimService = operationClaimService;
+        _operationClaimDomainService = operationClaimDomainService;
         _mapper = mapper;
-        _operationClaimBusinessRules = operationClaimBusinessRules;
     }
 
     public async Task<GetByIdOperationClaimQueryResponse> Handle(GetByIdOperationClaimQueryRequest request,
         CancellationToken cancellationToken)
     {
-        OperationClaim? operationClaim = await _operationClaimService.GetByIdAsync(
-            request.Id,
-            enableTracking: false,
-            cancellationToken: cancellationToken
-        );
-        await _operationClaimBusinessRules.OperationClaimShouldExistWhenSelected(operationClaim);
+        OperationClaim operationClaim = await _operationClaimDomainService.GetOperationClaimByIdAsync(request.Id);
 
-        return _mapper.Map<GetByIdOperationClaimQueryResponse>(operationClaim);
+        GetByIdOperationClaimQueryResponse response = _mapper.Map<GetByIdOperationClaimQueryResponse>(operationClaim);
+
+        return response;
     }
 }

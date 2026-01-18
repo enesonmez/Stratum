@@ -16,17 +16,17 @@
       <Reference Include="Core.CrossCuttingConcerns.Logging">
         <HintPath>..\..\..\Stratum.Core\src\Core.CrossCuttingConcerns.Logging\bin\Debug\net9.0\Core.CrossCuttingConcerns.Logging.dll</HintPath>
       </Reference>
+      <Reference Include="Core.Domain">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Domain\bin\Debug\net9.0\Core.Domain.dll</HintPath>
+      </Reference>
       <Reference Include="Core.Localization">
         <HintPath>..\..\..\Stratum.Core\src\Core.Localization\bin\Debug\net9.0\Core.Localization.dll</HintPath>
       </Reference>
-      <Reference Include="Core.Localization.DI">
-        <HintPath>..\..\..\Stratum.Core\src\Core.Localization.DI\bin\Debug\net9.0\Core.Localization.DI.dll</HintPath>
-      </Reference>
-      <Reference Include="Core.Localization.File">
-        <HintPath>..\..\..\Stratum.Core\src\Core.Localization.File\bin\Debug\net9.0\Core.Localization.File.dll</HintPath>
-      </Reference>
       <Reference Include="Core.Persistence">
         <HintPath>..\..\..\Stratum.Core\src\Core.Persistence\bin\Debug\net9.0\Core.Persistence.dll</HintPath>
+      </Reference>
+      <Reference Include="Core.Persistence.Abstractions">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Persistence.Abstractions\bin\Debug\net9.0\Core.Persistence.Abstractions.dll</HintPath>
       </Reference>
       <Reference Include="Core.Security">
         <HintPath>..\..\..\Stratum.Core\src\Core.Security\bin\Debug\net9.0\Core.Security.dll</HintPath>
@@ -49,25 +49,9 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.1" />
     </ItemGroup>
+
     <ItemGroup>
-      <None Update="Features\**\Resources\Locales\*.*.yaml">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Features\OperationClaims\Resources\Locales\operation-claims.en.yaml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Features\OperationClaims\Resources\Locales\operation-claims.tr.yaml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Features\UserOperationClaims\Resources\Locales\user-operation-claims.en.yaml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Features\UserOperationClaims\Resources\Locales\user-operation-claims.tr.yaml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Features\Users\Rules\" />
+      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>
