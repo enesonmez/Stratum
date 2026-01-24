@@ -1,7 +1,9 @@
 using System.Reflection;
+using Application.Features.Auth.Mappers;
 using Application.Features.OperationClaims.Mappers;
 using Application.Features.UserOperationClaims.Mappers;
 using Application.Features.Users.Mappers;
+using Application.Services.AuthService;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Performance;
@@ -14,7 +16,7 @@ using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Core.Security.DI;
-using Core.Security.Jwt;
+using Core.Security.Abstractions.Jwt;
 
 namespace Application;
 
@@ -41,6 +43,7 @@ public static class ApplicationServiceRegistration
         services.AddSingleton<UserMapper>();
         services.AddSingleton<OperationClaimMapper>();
         services.AddSingleton<UserOperationClaimMapper>();
+        services.AddSingleton<AuthMapper>();
         
         // Logging
         var fileLogConfiguration = GetFileLogConfiguration(configuration);
@@ -48,6 +51,7 @@ public static class ApplicationServiceRegistration
         services.AddSingleton<ILogger, SeriLogLogger>();
         
         // Services
+        services.AddScoped<IAuthService, AuthManager>();
         
         // Security
         var tokenOptions =  GetTokenOptions(configuration);

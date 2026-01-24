@@ -1,4 +1,4 @@
-using Core.Security.Constants;
+using Core.Security.Abstractions.Constants;
 using Domain.Constants.Claims;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;

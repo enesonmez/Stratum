@@ -34,6 +34,9 @@
       <Reference Include="Core.Security">
         <HintPath>..\..\..\Stratum.Core\src\Core.Security\bin\Debug\net9.0\Core.Security.dll</HintPath>
       </Reference>
+      <Reference Include="Core.Security.Abstractions">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Security.Abstractions\bin\Debug\net9.0\Core.Security.Abstractions.dll</HintPath>
+      </Reference>
       <Reference Include="Core.Security.Swagger">
         <HintPath>..\..\..\Stratum.Core\src\Core.Security.Swagger\bin\Debug\net9.0\Core.Security.Swagger.dll</HintPath>
       </Reference>

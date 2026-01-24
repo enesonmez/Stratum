@@ -1,11 +1,8 @@
-using Core.CrossCuttingConcerns.Exception.Types;
-using Core.Security.Enums;
-using Core.Security.Hashing;
-using Domain.Services.Users.Constants;
+using Core.Security.Abstractions.Enums;
 
 namespace Domain.Entities;
 
-public class User : Core.Security.Entities.User<Guid>
+public class User : Core.Security.Abstractions.Entities.User<Guid>
 {
     public string? FirstName { get; private set; }
     public string? LastName { get; private set; }
@@ -27,7 +24,7 @@ public class User : Core.Security.Entities.User<Guid>
         AuthenticatorType = authenticatorType;
     }
     
-    public static User Create(string firstName, string lastName, string email, string password)
+    public static User Create(string firstName, string lastName, string email, byte[] passwordHash, byte[] passwordSalt)
     {
         if (string.IsNullOrWhiteSpace(firstName)) 
             throw new ArgumentException("First name cannot be empty.", nameof(firstName));
@@ -37,11 +34,6 @@ public class User : Core.Security.Entities.User<Guid>
         
         if (string.IsNullOrWhiteSpace(email)) 
             throw new ArgumentException("Email cannot be empty.", nameof(email));
-
-        if (string.IsNullOrWhiteSpace(password) && password.Length < 6)
-            throw new BusinessException(UsersMessages.PasswordTooWeak, UsersMessages.SectionName);
-        
-        HashingHelper.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
         var user = new User(
             firstName: firstName,

@@ -1,12 +1,14 @@
 namespace Domain.Entities;
 
-public class OperationClaim : Core.Security.Entities.OperationClaim<int>
+public class OperationClaim : Core.Security.Abstractions.Entities.OperationClaim<int>
 {
     public virtual ICollection<UserOperationClaim> UserOperationClaims { get; set; } = null!;
     
     public OperationClaim()
     {
     }
+    public OperationClaim(int operationClaimId, string name): base(operationClaimId, name)
+    {}
     
     private OperationClaim(string name) : base(name)
     {

@@ -38,4 +38,14 @@ public class UserOperationClaimReadRepository : EfReadRepositoryBase<UserOperati
         
         return await queryable.ToPaginateAsync(index, size, from: 0, cancellationToken);
     }
+    
+    public async Task<IList<OperationClaim>> GetOperationClaimsByUserIdAsync(Guid userId)
+    {
+        List<OperationClaim> operationClaims = await Query()
+            .AsNoTracking()
+            .Where(p => p.UserId.Equals(userId))
+            .Select(p => new OperationClaim(p.OperationClaimId,p.OperationClaim.Name))
+            .ToListAsync();
+        return operationClaims;
+    }
 }

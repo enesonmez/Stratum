@@ -52,7 +52,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                     LastName = "Stratum",
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt,
-                    AuthenticatorType = Core.Security.Enums.AuthenticatorType.None,
+                    AuthenticatorType = Core.Security.Abstractions.Enums.AuthenticatorType.None,
                     CreatedDate = DateTime.UtcNow
                 };
             yield return adminUser;

@@ -4,7 +4,7 @@ using Core.Localization.WebApi;
 using Persistence;
 using Core.Persistence.WebApi;
 using Core.Security.Encryption;
-using Core.Security.Jwt;
+using Core.Security.Abstractions.Jwt;
 using Core.Security.Swagger.Extensions;
 using Domain;
 using Infrastructure;
@@ -58,7 +58,7 @@ app.UseSwagger();
 app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "OpenAPI v1"));
 
 
-//if (app.Environment.IsProduction())
+if (app.Environment.IsProduction())
     app.ConfigureCustomExceptionMiddleware();
 
 app.UseDbMigrationApplier();

@@ -1,3 +1,4 @@
+using Core.Security.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,8 +24,7 @@ public class BaseController : ControllerBase
 
     protected Guid GetUserIdFromRequest() //todo authentication behavior?
     {
-        // var userId = Guid.Parse(HttpContext.User.GetIdClaim()!);
-        // return userId;
-        return Guid.Empty;
+        var userId = Guid.Parse(HttpContext.User.GetIdClaim()!);
+        return userId;
     }
 }

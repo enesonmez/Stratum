@@ -17,4 +17,6 @@ public interface IUserOperationClaimReadRepository : IAsyncReadRepository<UserOp
         bool enableTracking = true,
         CancellationToken cancellationToken = default
     );
+
+    public Task<IList<OperationClaim>> GetOperationClaimsByUserIdAsync(Guid userId);
 }

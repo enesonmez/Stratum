@@ -2,6 +2,7 @@ using Domain.Entities;
 using Domain.Repositories.Users; 
 using Core.CrossCuttingConcerns.Exception.Types;
 using Core.Domain.Services;
+using Core.Security.Abstractions.Hashing;
 using Domain.Services.Users.Constants;
 
 namespace Domain.Services.Users;
@@ -9,17 +10,26 @@ namespace Domain.Services.Users;
 public class UserDomainService : IDomainService
 {
     private readonly IUserReadRepository _userReadRepository;
+    private readonly IHashingService _hashingService;
 
-    public UserDomainService(IUserReadRepository userReadRepository)
+    public UserDomainService(IUserReadRepository userReadRepository, IHashingService hashingService)
     {
         _userReadRepository = userReadRepository;
+        _hashingService = hashingService;
     }
 
     public async Task<User> CreateUserAsync(string firstName, string lastName, string email, string password)
     {
         await ValidateEmailIsUniqueAsync(email);
+        
+        if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+        {
+            throw new BusinessException(UsersMessages.PasswordTooWeak, UsersMessages.SectionName);
+        }
+        
+        _hashingService.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
-        var user = User.Create(firstName, lastName, email, password);
+        var user = User.Create(firstName, lastName, email, passwordHash, passwordSalt);
 
         return user;
     }

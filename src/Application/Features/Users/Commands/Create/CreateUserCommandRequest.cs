@@ -1,8 +1,8 @@
-using Application.Features.Users.Constants;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Performance;
 using Core.Application.Pipelines.Transaction;
+using Domain.Constants.Claims;
 using MediatR;
 
 namespace Application.Features.Users.Commands.Create;

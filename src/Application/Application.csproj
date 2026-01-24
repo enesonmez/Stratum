@@ -28,8 +28,8 @@
       <Reference Include="Core.Persistence.Abstractions">
         <HintPath>..\..\..\Stratum.Core\src\Core.Persistence.Abstractions\bin\Debug\net9.0\Core.Persistence.Abstractions.dll</HintPath>
       </Reference>
-      <Reference Include="Core.Security">
-        <HintPath>..\..\..\Stratum.Core\src\Core.Security\bin\Debug\net9.0\Core.Security.dll</HintPath>
+      <Reference Include="Core.Security.Abstractions">
+        <HintPath>..\..\..\Stratum.Core\src\Core.Security.Abstractions\bin\Debug\net9.0\Core.Security.Abstractions.dll</HintPath>
       </Reference>
       <Reference Include="Core.Security.DI">
         <HintPath>..\..\..\Stratum.Core\src\Core.Security.DI\bin\Debug\net9.0\Core.Security.DI.dll</HintPath>
@@ -48,10 +48,6 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.1" />
       <PackageReference Include="Riok.Mapperly" Version="4.3.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>
