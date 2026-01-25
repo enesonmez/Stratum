@@ -4,6 +4,7 @@ using Core.Security.Abstractions.Jwt;
 using Domain.Entities;
 using Domain.Repositories.RefreshTokens;
 using Domain.Repositories.UserOperationClaims;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Services.AuthService;
 
@@ -11,19 +12,29 @@ public class AuthManager : IAuthService
 {
     private readonly IUserOperationClaimReadRepository _userOperationClaimReadRepository;
     private readonly IRefreshTokenWriteRepository _refreshTokenWriteRepository;
+    private readonly IRefreshTokenReadRepository _refreshTokenReadRepository;
     private readonly ITokenHelper<Guid, int, Guid> _tokenHelper;
     private readonly AuthMapper _authMapper;
+    private readonly TokenOptions _tokenOptions;
 
     public AuthManager(
         IUserOperationClaimReadRepository userOperationClaimReadRepository,
         IRefreshTokenWriteRepository refreshTokenWriteRepository,
+        IRefreshTokenReadRepository refreshTokenReadRepository,
         ITokenHelper<Guid, int, Guid> tokenHelper,
-        AuthMapper authMapper)
+        AuthMapper authMapper,
+        IConfiguration configuration)
     {
         _userOperationClaimReadRepository = userOperationClaimReadRepository;
         _refreshTokenWriteRepository = refreshTokenWriteRepository;
+        _refreshTokenReadRepository = refreshTokenReadRepository;
         _tokenHelper = tokenHelper;
         _authMapper = authMapper;
+        
+        const string tokenOptionsConfigurationSection = "TokenOptions";
+        _tokenOptions =
+            configuration.GetSection(tokenOptionsConfigurationSection).Get<TokenOptions>()
+            ?? throw new NullReferenceException($"\"{tokenOptionsConfigurationSection}\" section cannot found in configuration");
     }
     
     public async Task<AccessToken> CreateAccessToken(User user)
@@ -57,9 +68,13 @@ public class AuthManager : IAuthService
         return addedRefreshToken;
     }
 
-    public Task DeleteOldRefreshTokens(Guid userId)
+    public async Task DeleteOldRefreshTokens(Guid userId)
     {
-        throw new NotImplementedException();
+        List<RefreshToken> refreshTokens = await _refreshTokenReadRepository.GetOldRefreshTokensAsync(
+            userId,
+            _tokenOptions.RefreshTokenTtl
+        );
+        await _refreshTokenWriteRepository.DeleteRangeAsync(refreshTokens);
     }
 
     public Task RevokeDescendantRefreshTokens(RefreshToken refreshToken, string ipAddress, string reason)

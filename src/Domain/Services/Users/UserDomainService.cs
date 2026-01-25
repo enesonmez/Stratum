@@ -71,6 +71,25 @@ public class UserDomainService : IDomainService
         return user!;
     }
     
+    public async Task<User> VerifyUserCredentialsAsync(string email, string password)
+    {
+        User? user = await _userReadRepository.GetAsync(
+            predicate: u => u.Email == email,
+            enableTracking: false 
+        );
+
+        ValidateUserExists(user);
+
+        bool isPasswordValid = _hashingService.VerifyPasswordHash(password, user!.PasswordHash, user.PasswordSalt);
+        
+        if (!isPasswordValid)
+        {
+            throw new BusinessException(UsersMessages.PasswordDontMatch, UsersMessages.SectionName);
+        }
+
+        return user;
+    }
+    
     // --- Private Helper Methods ---
     private void ValidateUserExists(User? user)
     {
