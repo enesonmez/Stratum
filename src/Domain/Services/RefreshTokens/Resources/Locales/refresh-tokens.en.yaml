@@ -1,0 +1,3 @@
+RefreshTokenNotFound: "Refresh Token not found."
+RefreshTokenExpired: "Refresh Token expired."
+InvalidRefreshTokenReuseDetected: "Invalid Refresh Token - Reuse Detected."

@@ -57,11 +57,6 @@ public class AuthManager : IAuthService
         return Task.FromResult(refreshToken);
     }
 
-    public Task<RefreshToken?> GetRefreshTokenByToken(string refreshToken)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<RefreshToken> AddRefreshToken(RefreshToken refreshToken)
     {
         RefreshToken addedRefreshToken = await _refreshTokenWriteRepository.AddAsync(refreshToken);
@@ -75,20 +70,5 @@ public class AuthManager : IAuthService
             _tokenOptions.RefreshTokenTtl
         );
         await _refreshTokenWriteRepository.DeleteRangeAsync(refreshTokens);
-    }
-
-    public Task RevokeDescendantRefreshTokens(RefreshToken refreshToken, string ipAddress, string reason)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task RevokeRefreshToken(RefreshToken token, string ipAddress, string? reason = null, string? replacedByToken = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<RefreshToken> RotateRefreshToken(User user, RefreshToken refreshToken, string ipAddress)
-    {
-        throw new NotImplementedException();
     }
 }

@@ -1,0 +1,3 @@
+RefreshTokenNotFound: "Refresh Token bulunamadı."
+RefreshTokenExpired: "Refresh Token süresi dolmuş."
+InvalidRefreshTokenReuseDetected: "Geçersiz Refresh Token - Yeniden kullanım tespit edildi."

@@ -37,11 +37,11 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommandRequest, Re
         
         AccessToken createdAccessToken = await _authService.CreateAccessToken(createdUser);
         
-        RefreshToken createdRefreshToken = await _authService.CreateRefreshToken(
+        Domain.Entities.RefreshToken createdRefreshToken = await _authService.CreateRefreshToken(
             createdUser,
             request.IpAddress
         );
-        RefreshToken addedRefreshToken = await _authService.AddRefreshToken(createdRefreshToken);
+        Domain.Entities.RefreshToken addedRefreshToken = await _authService.AddRefreshToken(createdRefreshToken);
 
         RegisteredCommandResponse registeredResponse = new() { AccessToken = createdAccessToken, RefreshToken = addedRefreshToken };
         return registeredResponse;

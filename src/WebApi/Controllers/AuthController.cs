@@ -1,4 +1,5 @@
 using Application.Features.Auth.Commands.Login;
+using Application.Features.Auth.Commands.RefreshToken;
 using Application.Features.Auth.Commands.Register;
 using Application.Features.Auth.Constants;
 using Domain.Entities;
@@ -28,6 +29,22 @@ namespace WebApi.Controllers
             SetRefreshTokenToCookie(result.RefreshToken);
 
             return Ok(result.ToHttpResponse());
+        }
+        
+        [HttpPost("RefreshToken")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            string refreshToken = GetRefreshTokenFromCookies();
+            RefreshTokenCommandRequest refreshTokenCommandRequest = new() 
+            { 
+                RefreshToken = refreshToken, 
+                IpAddress = GetIpAddress() 
+            };
+
+            RefreshedTokenCommandResponse result = await Mediator.Send(refreshTokenCommandRequest);
+            SetRefreshTokenToCookie(result.RefreshToken);
+
+            return Ok(result.AccessToken);
         }
         
         private string GetRefreshTokenFromCookies()
