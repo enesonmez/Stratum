@@ -54,7 +54,13 @@ namespace WebApi.Controllers
 
         private void SetRefreshTokenToCookie(RefreshToken refreshToken)
         {
-            CookieOptions cookieOptions = new() { HttpOnly = true, Expires = DateTime.UtcNow.AddDays(7) };
+            CookieOptions cookieOptions = new()
+            {
+                HttpOnly = true, 
+                Secure = true,
+                Expires = DateTime.UtcNow.AddDays(7),
+                SameSite =  SameSiteMode.Strict
+            };
             Response.Cookies.Append(key: AuthConstants.RefreshTokenCookieName, refreshToken.Token, cookieOptions);
         }
     }
